@@ -57,19 +57,25 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Web.config" />
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="Binary\HBinary.cs" />
+    <Compile Include="Cryptography\HCryptography.cs" />
+    <Compile Include="Database\HDatabase.cs" />
+    <Compile Include="DataTable\HDataTable.cs" />
+    <Compile Include="DateTime\HDateTime.cs" />
+    <Compile Include="Dictionary\Dictionary.cs" />
+    <Compile Include="Encoding\HEncoding.cs" />
+    <Compile Include="Image\HImage.cs" />
+    <Compile Include="IO\HIO.cs" />
+    <Compile Include="List\HList.cs" />
+    <Compile Include="Net\HNet.cs" />
+    <Compile Include="Numeric\HNumeric.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Serialization\HSerialization.cs" />
+    <Compile Include="String\HString.cs" />
+    <Compile Include="Web\HWeb.cs" />
+    <Compile Include="Xml\HXml.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Web.Debug.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-    <None Include="Web.Release.config">
-      <DependentUpon>Web.config</DependentUpon>
-    </None>
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
