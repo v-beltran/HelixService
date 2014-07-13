@@ -5,7 +5,7 @@ using System.Web;
 
 namespace HelixService.Utility
 {
-    public class HImage
+    public class HDictionary
     {
     }
 }

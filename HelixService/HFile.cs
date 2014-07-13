@@ -5,7 +5,7 @@ using System.Web;
 
 namespace HelixService.Utility
 {
-    public class HNumeric
+    public class HFile
     {
     }
 }
