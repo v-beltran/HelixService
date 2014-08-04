@@ -28,6 +28,16 @@ namespace HelixService.Utility
         }
 
         /// <summary>
+        /// Safely trims a string from object.
+        /// </summary>
+        /// <param name="value">The object to set string and trim.</param>
+        /// <returns></returns>
+        public static String SafeTrim(Object value)
+        {
+            return value != null ? HString.ToString(value).Trim() : String.Empty;
+        }
+
+        /// <summary>
         /// Trims a string when null is an acceptable output.
         /// </summary>
         /// <param name="value">The string to trim.</param>

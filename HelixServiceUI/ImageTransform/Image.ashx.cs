@@ -6,12 +6,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace HelixServiceUI
+namespace HelixServiceUI.ImageTransform
 {
     /// <summary>
     /// Resize, scale, crop, and pad images
     /// </summary>
-    public class image : IHttpHandler
+    public class Image : IHttpHandler
     {
 
         public void ProcessRequest(HttpContext context)
@@ -31,8 +31,8 @@ namespace HelixServiceUI
             String cropy = HString.SafeTrim(context.Request.QueryString["y"]);
             Boolean square = HBoolean.ToBooleanFromYN(HString.SafeTrim(context.Request.QueryString["square"]));
 
-            // Grab the image from the database--set one for testing
-            Bitmap image = (Bitmap)Image.FromFile(HttpContext.Current.Server.MapPath("/images/img-handler-test.png"));
+            // Grab image from database--just set one for testing
+            Bitmap image = (Bitmap)System.Drawing.Image.FromFile(HttpContext.Current.Server.MapPath("image.gif"));
             Byte[] imageBytes;
 
             /* 1. Resize image */

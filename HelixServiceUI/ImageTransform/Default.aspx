@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ImageTransform.aspx.cs" Inherits="HelixServiceUI.ImageTransform" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="HelixServiceUI.ImageTransform.Default" %>
 
 <!DOCTYPE html>
 

@@ -430,7 +430,7 @@ namespace HelixService.Utility
                     graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                     graphics.FillRectangle(System.Drawing.Brushes.White, 0, 0, startBitmap.Width, startBitmap.Height);
                     graphics.DrawImage(resizeBitmap, new Point((startBitmap.Width - resizeBitmap.Width) / 2, (startBitmap.Height - resizeBitmap.Height) / 2));
-
+                    
                     using (MemoryStream ms = new MemoryStream())
                     {
                         newBitmap.Save(ms, startBitmap.RawFormat);

@@ -42,7 +42,7 @@ namespace HelixService.Utility
         /// </summary>
         /// <param name="bits"></param>
         /// <returns></returns>
-        public static Byte[] CreateRandomSalt(Int32 bits)
+        public static Byte[] GetRandomSalt(Int32 bits)
         {
             RNGCryptoServiceProvider csprng = new RNGCryptoServiceProvider();
             Byte[] salt = new Byte[0];
@@ -87,8 +87,13 @@ namespace HelixService.Utility
         /// <returns></returns>
         public static String GetHashString(String input, String salt, Int32 bits)
         {
+            // Create a byte array with salt prepended to a string value.
             Byte[] inputBytes = HEncoding.StringToBytes(salt + input);
+
+            // Create a hash of a given length and the byte array created above.
             Byte[] hashBytes = HCryptography.BytesToHash(inputBytes, bits);
+
+            // Get a string representation of the hash created above.
             String hashString = HCryptography.BytesToHexString(hashBytes);
 
             return hashString;
