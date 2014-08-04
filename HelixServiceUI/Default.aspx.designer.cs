@@ -11,7 +11,7 @@ namespace HelixServiceUI
 {
 
 
-    public partial class ImageTransform
+    public partial class _default
     {
 
         /// <summary>
