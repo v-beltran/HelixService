@@ -134,7 +134,7 @@ namespace HelixServiceUI.UserAuthentication
         {
             try
             {
-                using (SqlCommand cmd = new SqlCommand("UPDATE User_Master SET (user_master_guid=@user_master_guid, user_name=@user_name, user_password=@user_password, user_salt=@user_salt)", cn))
+                using (SqlCommand cmd = new SqlCommand("UPDATE User_Master SET user_master_guid=@user_master_guid, user_name=@user_name, user_password=@user_password, user_salt=@user_salt WHERE user_master_guid=@user_master_guid", cn))
                 {
                     cmd.Parameters.AddWithValue("@user_master_guid", this.Guid);
                     cmd.Parameters.AddWithValue("@user_name", this.UserName);

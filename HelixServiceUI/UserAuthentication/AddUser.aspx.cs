@@ -24,27 +24,37 @@ namespace HelixServiceUI.UserAuthentication
             // An error or success message will be displayed.
             this.lblStatus.Visible = true;
 
-            // Commit user to database when password input fields match.
-            if (this.txtConfirmPassword.Text.Equals(this.txtPassword.Text))
+            // Require a minimum password length.
+            if (this.txtPassword.Text.Length > 8)
             {
-                // Check if the username is taken.
-                if (this.ValidUsername())
+                // Commit user to database when password input fields match.
+                if (this.txtConfirmPassword.Text.Equals(this.txtPassword.Text))
                 {
-                    // Try to insert new user to the database.
-                    this.InsertUser();
+                    // Check if the username is taken.
+                    if (this.ValidUsername())
+                    {
+                        // Try to insert new user to the database.
+                        this.InsertUser();
+                    }
+                    else
+                    {
+                        // Display error when username exists already.
+                        this.lblStatus.ForeColor = System.Drawing.Color.Red;
+                        this.lblStatus.Text = String.Format("Error: {0} is already taken.", this.txtUsername.Text);
+                    }
                 }
                 else
                 {
-                    // Display error when username exists already.
+                    // Display error when input fields are not correct.
                     this.lblStatus.ForeColor = System.Drawing.Color.Red;
-                    this.lblStatus.Text = String.Format("Error: {0} is already taken.", this.txtUsername.Text);
+                    this.lblStatus.Text = "Error: The specified passwords do not match.";
                 }
             }
             else
             {
-                // Display error when input fields are not correct.
+                // Display error when password is not long enough.
                 this.lblStatus.ForeColor = System.Drawing.Color.Red;
-                this.lblStatus.Text = "Error: The specified passwords do not match.";
+                this.lblStatus.Text = "Error: Your password must be at least 8 characters.";
             }
         }
 

@@ -58,6 +58,8 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="js\jquery-1.11.1.min.js" />
+    <Content Include="SearchAJAX\Default.aspx" />
     <Content Include="UserAuthentication\AddUser.aspx" />
     <Content Include="db_install_scripts.sql" />
     <Content Include="Default.aspx" />
@@ -70,6 +72,17 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SearchAJAX\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SearchAJAX\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SearchAJAX\Search.ashx.cs">
+      <DependentUpon>Search.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="SearchAJAX\State.cs" />
     <Compile Include="UserAuthentication\AddUser.aspx.cs">
       <DependentUpon>AddUser.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -113,6 +126,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="ImageTransform\Image.ashx" />
+    <Content Include="SearchAJAX\Search.ashx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -128,7 +142,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="css\" />
-    <Folder Include="js\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />

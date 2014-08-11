@@ -11,47 +11,60 @@ namespace HelixServiceUI.UserAuthentication
 {
     public partial class Default : System.Web.UI.Page
     {
+
+        #region " Page Events "
+
+        protected void Page_Init(object sender, EventArgs e)
+        {
+            // No need to login again if we still have the session.
+            if (HttpContext.Current.Session["User_LoggedIn"] != null)
+                this.InitLoggedIn(HttpContext.Current.Session["User_LoggedIn"] as User);
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
 
         }
+
+        #endregion
 
         /// <summary>
         /// This click event will attempt to log the user in.
         /// </summary>
         protected void btnLogin_Click(object sender, EventArgs e)
         {
-            // An error or success message will be displayed.
-            this.lblStatus.Visible = true;
+            // Initialize new user.
+            User user = new User();
 
             // Try to find existing user in the database.
-            if (this.ValidUser())
+            if (this.ValidUser(out user))
             {
-                // Show a welcome message.
-                this.lblStatus.ForeColor = System.Drawing.Color.Green;
-                this.lblStatus.Text = String.Format("Welcome {0}!", this.txtUsername.Text);
+                // Show/Hide form controls.
+                this.InitLoggedIn(user);
 
-                // Hide the login form.
-                this.divLogin.Visible = false;
-                
-                // Show the logout button.
-                this.divLoggedIn.Visible = true;
+                // Set a session variable to indicate a user is logged in.
+                HttpContext.Current.Session["User_LoggedIn"] = user;
             }
             else
             {
                 // Doesn't look like the user exists.
+                this.lblStatus.Visible = true;
                 this.lblStatus.ForeColor = System.Drawing.Color.Red;
                 this.lblStatus.Text = "Your username and/or password is incorrect.";
             }
         }
 
-        private Boolean ValidUser()
+        /// <summary>
+        /// Try to find an existing user in the database.
+        /// </summary>
+        /// <returns>True/False</returns>
+        private Boolean ValidUser(out User user)
         {
             try
             {
                 // Find the user by their username, since this should be unique.
                 UserFilter filter = new UserFilter() { UserName = this.txtUsername.Text };
-                User user = UserAuthentication.User.Load(WebConfigurationManager.AppSettings["ConnString"], filter);
+                user = UserAuthentication.User.Load(WebConfigurationManager.AppSettings["ConnString"], filter);
 
                 // Attempt to re-create their hash with the given password and the salt saved in the database.
                 String passwordHash = HCryptography.GetHashString(this.txtPassword.Text, user.UserSalt, 256);
@@ -64,8 +77,28 @@ namespace HelixServiceUI.UserAuthentication
             }
             catch
             {
+                // Don't return anything valid.
+                user = null;
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Show/Hide form controls.
+        /// </summary>
+        /// <param name="user">The user in session.</param>
+        private void InitLoggedIn(User user)
+        {
+            // Show a welcome message.
+            this.lblStatus.Visible = true;
+            this.lblStatus.ForeColor = System.Drawing.Color.Green;
+            this.lblStatus.Text = String.Format("Welcome {0}!", user.UserName);
+
+            // Hide the login form.
+            this.divLogin.Visible = false;
+
+            // Show the logout button.
+            this.divLoggedIn.Visible = true;
         }
 
         /// <summary>
@@ -73,6 +106,9 @@ namespace HelixServiceUI.UserAuthentication
         /// </summary>
         protected void btnLogout_Click(object sender, EventArgs e)
         {
+            // Terminate user session.
+            HttpContext.Current.Session["User_LoggedIn"] = null;
+
             // Hide login message.
             this.lblStatus.Visible = false;
 

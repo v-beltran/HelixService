@@ -19,14 +19,26 @@
                 padding: 10px 0 10px 0;
             }
 
+            #divLogin div:last-child {
+                padding: 10px 0 10px 0;
+            }
+
         #divLoggedIn {
+        }
+
+            #divLoggedIn div {
+                padding: 10px 0 10px 0;
+            }
+
+        #divAddUsers {
+            padding: 10px 0 10px 0;
         }
     </style>
 </head>
 <body>
     <form id="form1" runat="server">
         <div id="divLoginForm">
-            <div class="divStatus">
+            <div id="divStatus">
                 <asp:Label ID="lblStatus" Text="" runat="server" Visible="false"></asp:Label>
             </div>
             <div id="divLogin" runat="server" clientidmode="static">
@@ -41,8 +53,14 @@
                 <div>
                     <asp:Button ID="btnLogin" Text="Login" runat="server" OnClick="btnLogin_Click" />
                 </div>
+                <div>
+                    <a href="AddUser.aspx">No users? Create them here.</a>
+                </div>
             </div>
             <div id="divLoggedIn" runat="server" visible="false" clientidmode="static">
+                <div>
+                    <a href="UpdateUser.aspx">Update/Delete Users</a>
+                </div>
                 <div>
                     <asp:Button ID="btnLogout" Text="Logout" runat="server" OnClick="btnLogout_Click" />
                 </div>
