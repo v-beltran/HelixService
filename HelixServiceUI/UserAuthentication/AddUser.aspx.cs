@@ -25,7 +25,7 @@ namespace HelixServiceUI.UserAuthentication
             this.lblStatus.Visible = true;
 
             // Require a minimum password length.
-            if (this.txtPassword.Text.Length > 8)
+            if (this.txtPassword.Text.Length >= 8)
             {
                 // Commit user to database when password input fields match.
                 if (this.txtConfirmPassword.Text.Equals(this.txtPassword.Text))

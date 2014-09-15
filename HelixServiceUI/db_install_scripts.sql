@@ -8,7 +8,7 @@ user_password nvarchar(512) not null,
 user_salt nvarchar(512) not null)
 
 /****************************************
-Use: SearchJSON Demo
+Use: SearchAJAX Demo
 *****************************************/
 CREATE TABLE State_Master(
 state_ansi_code nvarchar(2) not null,

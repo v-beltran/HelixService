@@ -42,8 +42,9 @@ namespace HelixService.Utility
     /// </summary>
     public enum ObjectState
     {
-        Insert = 0,
-        Update = 1,
-        Delete = 2
+        Clean = 0,
+        Insert = 1,
+        Update = 2,
+        Delete = 3
     }
 }

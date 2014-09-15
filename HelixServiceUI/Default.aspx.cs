@@ -15,7 +15,7 @@ namespace HelixServiceUI
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            Response.Write(HDateTime.FromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time")));
         }
     }
 }

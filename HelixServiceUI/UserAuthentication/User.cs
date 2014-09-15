@@ -58,6 +58,7 @@ namespace HelixServiceUI.UserAuthentication
             this.UserName = String.Empty;
             this.UserPassword = String.Empty;
             this.UserSalt = String.Empty;
+            this.State = ObjectState.Clean;
         }
 
         /// <summary>
@@ -66,10 +67,11 @@ namespace HelixServiceUI.UserAuthentication
         /// <param name="dr">The data row to populate the User object.</param>
         public User(DataRow dr)
         {
-            this.Guid = (Guid)dr["user_master_guid"];
+            this.Guid = Guid.Parse(HString.SafeTrim(dr["user_master_guid"]));
             this.UserName = HString.SafeTrim(dr["user_name"]);
             this.UserPassword = HString.SafeTrim(dr["user_password"]);
             this.UserSalt = HString.SafeTrim(dr["user_salt"]);
+            this.State = ObjectState.Clean;
         }
 
         #endregion

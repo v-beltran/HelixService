@@ -56,5 +56,16 @@ namespace HelixService.Utility
                 }
             }
         }
+
+        /// <summary>
+        /// Determine if a number is divisble by another number.
+        /// </summary>
+        /// <param name="a">The number to divide.</param>
+        /// <param name="b">The number to divide by.</param>
+        /// <returns></returns>
+        public static Boolean IsDivisible(Int32 a, Int32 b)
+        {
+            return (a % b) == 0;
+        }
     }
 }

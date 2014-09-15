@@ -58,6 +58,10 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="CalendarXSLT\Calendar.xslt">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="CalendarXSLT\Default.aspx" />
     <Content Include="js\jquery-1.11.1.min.js" />
     <Content Include="SearchAJAX\Default.aspx" />
     <Content Include="UserAuthentication\AddUser.aspx" />
@@ -72,6 +76,13 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CalendarXSLT\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CalendarXSLT\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
     <Compile Include="SearchAJAX\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
