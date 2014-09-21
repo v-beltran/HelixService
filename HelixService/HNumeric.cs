@@ -8,6 +8,31 @@ namespace HelixService.Utility
     public class HNumeric
     {
         /// <summary>
+        /// Gets an integer from object, which will default to '0' from an invalid value.
+        /// </summary>
+        /// <param name="value">The integer to be acquired from object.</param>
+        /// <returns>The integer from object passed or zero.</returns>
+        public static Int32 GetSafeInteger(Object value)
+        {
+            Int32 n;
+            if (value == null)
+            {
+                return 0;
+            }
+            else
+            {
+                if (Int32.TryParse(value.ToString(), out n))
+                {
+                    return n;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
         /// Gets an integer that can store null.
         /// </summary>
         /// <param name="value">The integer to be acquired from object.</param>
@@ -28,6 +53,31 @@ namespace HelixService.Utility
                 else
                 {
                     return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets a decimal from object, which will default to '0' from an invalid value.
+        /// </summary>
+        /// <param name="value">The decimal to be acquired from object.</param>
+        /// <returns>The decimal from object passed or zero.</returns>
+        public static Decimal GetSafeDecimal(Object value)
+        {
+            Decimal d;
+            if (value == null)
+            {
+                return 0;
+            }
+            else
+            {
+                if (Decimal.TryParse(value.ToString(), out d))
+                {
+                    return d;
+                }
+                else
+                {
+                    return 0;
                 }
             }
         }

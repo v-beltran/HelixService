@@ -67,85 +67,120 @@
           <tr class="days">
             <td>
               <xsl:if test="sunday">
-                <span class="day">
-                  <xsl:value-of select="sunday/@value"/>
-                </span>
+                <div class="day">
+                  <xsl:value-of select="sunday/@day"/>
+                </div>
               </xsl:if>
-              <xsl:if test="event">
+              <xsl:if test="sunday/@today = 'true'">
                 <div class="event">
-                  <xsl:value-of select="event"/>
+                  <xsl:text>Today</xsl:text>
+                </div>
+              </xsl:if>
+              <xsl:if test="sunday/event">
+                <div class="event">
+                  <xsl:value-of select="sunday/event"/>
                 </div>
               </xsl:if>
             </td>
             <td>
               <xsl:if test="monday">
-                <span class="day">
-                  <xsl:value-of select="monday/@value"/>
-                </span>
-              </xsl:if>
-              <xsl:if test="event">
+                <div class="day">
+                  <xsl:value-of select="monday/@day"/>
+                </div>              
+            </xsl:if>
+              <xsl:if test="monday/@today = 'true'">
                 <div class="event">
-                  <xsl:value-of select="event"/>
+                  <xsl:text>Today</xsl:text>
+                </div>
+              </xsl:if>
+              <xsl:if test="monday/event">
+                <div class="event">
+                  <xsl:value-of select="monday/event"/>
                 </div>
               </xsl:if>
             </td>
             <td>
               <xsl:if test="tuesday">
-                <span class="day">
-                  <xsl:value-of select="tuesday/@value"/>
-                </span>
+                <div class="day">
+                  <xsl:value-of select="tuesday/@day"/>
+                </div>
               </xsl:if>
-              <xsl:if test="event">
+              <xsl:if test="tuesday/@today = 'true'">
                 <div class="event">
-                  <xsl:value-of select="event"/>
+                  <xsl:text>Today</xsl:text>
+                </div>
+              </xsl:if>
+              <xsl:if test="tuesday/event">
+                <div class="event">
+                  <xsl:value-of select="tuesday/event"/>
                 </div>
               </xsl:if>
             </td>
             <td>
               <xsl:if test="wednesday">
-                <span class="day">
-                  <xsl:value-of select="wednesday/@value"/>
-                </span>
-              </xsl:if>
-              <xsl:if test="event">
+                <div class="day">
+                  <xsl:value-of select="wednesday/@day"/>
+                </div>              
+            </xsl:if>
+              <xsl:if test="wednesday/@today = 'true'">
                 <div class="event">
-                  <xsl:value-of select="event"/>
+                  <xsl:text>Today</xsl:text>
+                </div>
+              </xsl:if>
+              <xsl:if test="wednesday/event">
+                <div class="event">
+                  <xsl:value-of select="wednesday/event"/>
                 </div>
               </xsl:if>
             </td>
             <td>
               <xsl:if test="thursday">
-                <span class="day">
-                  <xsl:value-of select="thursday/@value"/>
-                </span>
-              </xsl:if>
-              <xsl:if test="event">
+                <div class="day">
+                  <xsl:value-of select="thursday/@day"/>
+                </div>              
+            </xsl:if>
+              <xsl:if test="thursday/@today = 'true'">
                 <div class="event">
-                  <xsl:value-of select="event"/>
+                  <xsl:text>Today</xsl:text>
+                </div>
+              </xsl:if>
+              <xsl:if test="thursday/event">
+                <div class="event">
+                  <xsl:value-of select="thursday/event"/>
                 </div>
               </xsl:if>
             </td>
             <td>
               <xsl:if test="friday">
-                <span class="day">
-                  <xsl:value-of select="friday/@value"/>
-                </span>
+                <div class="day">
+                  <xsl:value-of select="friday/@day"/>
+                </div>
               </xsl:if>
-              <xsl:if test="event">
+              <xsl:if test="friday/@today = 'true'">
                 <div class="event">
-                  <xsl:value-of select="event"/>
+                  <xsl:text>Today</xsl:text>
+                </div>
+              </xsl:if>
+              <xsl:if test="friday/event">
+                <div class="event">
+                  <xsl:value-of select="friday/event"/>
                 </div>
               </xsl:if>
             </td>
             <td>
               <xsl:if test="saturday">
-                <span class="day">
-                  <xsl:value-of select="saturday/@value"/>
-                </span>
+                <div class="day">
+                  <xsl:value-of select="saturday/@day"/>
+                </div>
               </xsl:if>
-              <xsl:if test="event">
+              <xsl:if test="saturday/@today = 'true'">
                 <div class="event">
-                  <xsl:value-of select="event"/>
+                  <xsl:text>Today</xsl:text>
+                </div>
+              </xsl:if>
+              <xsl:if test="saturday/event">
+                <div class="event">
+                  <xsl:value-of select="saturday/event"/>
                 </div>
               </xsl:if>
             </td>

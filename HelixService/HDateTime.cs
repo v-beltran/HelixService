@@ -8,6 +8,15 @@ namespace HelixService.Utility
 {
     public class HDateTime
     {
+        public enum WeekOfMonth
+        {
+            First = 0,
+            Second = 1,
+            Third = 2,
+            Fourth = 3,
+            Last = 4
+        }
+
         /// <summary>
         /// Try to get the datetime from an object.
         /// </summary>
@@ -242,6 +251,92 @@ namespace HelixService.Utility
         public static Int32 GetWeekNumberOfYear(DateTime dt, DayOfWeek startOfWeek)
         {
             return CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(dt, CalendarWeekRule.FirstDay, startOfWeek);
+        }
+
+        /// <summary>
+        /// Get holidays in a given year. More can be added here...
+        /// </summary>
+        /// <param name="year">The year to fetch holidays dates in.</param>
+        /// <returns>A list of holiday dates.</returns>
+        public static Dictionary<DateTime, String> GetHolidaysInYear(Int32 year)
+        {
+            Dictionary<DateTime, String> holidays = new Dictionary<DateTime, String>();
+            // New Years
+            holidays.Add(new DateTime(year, 1, 1), "New Year's Day");
+            // Dr. Martin Luther King Day
+            holidays.Add(HDateTime.GetDayFromWeekOfMonth(new DateTime(year, 1, 1), WeekOfMonth.Third, DayOfWeek.Monday), "Dr. Martin Luther King Day");
+            // President's Day
+            holidays.Add(HDateTime.GetDayFromWeekOfMonth(new DateTime(year, 2, 1), WeekOfMonth.Third, DayOfWeek.Monday), "President's Day");
+            // Memorial Day
+            holidays.Add(HDateTime.GetDayFromWeekOfMonth(new DateTime(year, 5, 1), WeekOfMonth.Last, DayOfWeek.Monday), "Memorial Day");
+            // Independence Day
+            holidays.Add(new DateTime(year, 7, 4), "Independence Day");
+            // Labor Day
+            holidays.Add(HDateTime.GetDayFromWeekOfMonth(new DateTime(year, 9, 1), WeekOfMonth.First, DayOfWeek.Monday), "Labor Day");
+            // Thanksgiving Day
+            holidays.Add(HDateTime.GetDayFromWeekOfMonth(new DateTime(year, 11, 1), WeekOfMonth.Fourth, DayOfWeek.Thursday), "Thanksgiving Day");
+            // Christmas Day
+            holidays.Add(new DateTime(year, 12, 25), "Christmas Day");
+
+            return holidays;
+        }
+
+        /// <summary>
+        /// Get holidays for a given month in a year.
+        /// </summary>
+        /// <param name="dt">The month date.</param>
+        /// <returns>A list of holidays in a month.</returns>
+        public static Dictionary<DateTime, String> GetHolidaysInMonth(DateTime dt)
+        {
+            return HDateTime.GetHolidaysInYear(dt.Year).Where(kvp => kvp.Key.Month.Equals(dt.Month)).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+        }
+
+        /// <summary>
+        /// Gets a specific day in a specific week in a month and day of the week.
+        /// </summary>
+        /// <param name="month">The month datetime to evaluate.</param>
+        /// <param name="weekOfMonth">The week of the month.</param>
+        /// <param name="dayOfWeek">The day of the week.</param>
+        /// <returns>The new adjusted date.</returns>
+        public static DateTime GetDayFromWeekOfMonth(DateTime month, WeekOfMonth weekOfMonth, DayOfWeek dayOfWeek)
+        {
+            DateTime currentDate = new DateTime(month.Year, month.Month, 1);
+            DateTime newDate = currentDate;
+            Int32 currentWeek = (int)weekOfMonth;
+
+            // No need to do any adjustments because the first of the month is the specified date already.
+            if (weekOfMonth == WeekOfMonth.First && dayOfWeek == currentDate.DayOfWeek)
+                return currentDate;
+
+            // This date already falls on the specified day of the week.
+            // We can simply add the number of weeks from what was given.
+            if (currentDate.DayOfWeek == dayOfWeek)
+                return newDate.AddDays(currentWeek * 7);
+
+            if (currentDate.DayOfWeek < dayOfWeek)
+            {
+                // When the specified day of week is greater than the current date's day of week, 
+                // we can add the difference to get to the same day.
+                newDate = newDate.AddDays(dayOfWeek - newDate.DayOfWeek);
+            }
+            else
+            {
+                // Go backwards to get to the first of the week.
+                newDate = newDate.AddDays(-(int)newDate.DayOfWeek);
+
+                // When we go outside the current month, make sure to increment a week.
+                if (newDate.Month != currentDate.Month)
+                    currentWeek++;
+
+                // Add the number of days to get to the specified day of week.
+                newDate = newDate.AddDays((int)dayOfWeek);
+            }
+
+            // Simply add the number of weeks to get to the specified date.
+            newDate = newDate.AddDays(currentWeek * 7);
+
+            // If adding too many days in the current month takes us to next month, go back a week.
+            return newDate.Month != currentDate.Month ? newDate.AddDays(-7) : newDate;
         }
     }
 }
