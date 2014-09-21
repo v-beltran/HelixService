@@ -43,7 +43,7 @@ namespace HelixServiceUI.UserAuthentication
             set { this._user_salt = value; }
         }
 
-        public ObjectState State { get; set; }
+        public DatabaseAction Action { get; set; }
 
         #endregion
 
@@ -58,7 +58,7 @@ namespace HelixServiceUI.UserAuthentication
             this.UserName = String.Empty;
             this.UserPassword = String.Empty;
             this.UserSalt = String.Empty;
-            this.State = ObjectState.Clean;
+            this.Action = DatabaseAction.DoNothing;
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace HelixServiceUI.UserAuthentication
             this.UserName = HString.SafeTrim(dr["user_name"]);
             this.UserPassword = HString.SafeTrim(dr["user_password"]);
             this.UserSalt = HString.SafeTrim(dr["user_salt"]);
-            this.State = ObjectState.Clean;
+            this.Action = DatabaseAction.DoNothing;
         }
 
         #endregion
@@ -88,15 +88,15 @@ namespace HelixServiceUI.UserAuthentication
             {
                 cn.Open();
 
-                switch (this.State)
+                switch (this.Action)
                 {
-                    case ObjectState.Insert:
+                    case DatabaseAction.Insert:
                         this.InsertObject(cn);
                         break;
-                    case ObjectState.Update:
+                    case DatabaseAction.Update:
                         this.UpdateObject(cn);
                         break;
-                    case ObjectState.Delete:
+                    case DatabaseAction.Delete:
                         this.DeleteObject(cn);
                         break;
                     default:

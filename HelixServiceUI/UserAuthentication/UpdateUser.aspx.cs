@@ -96,7 +96,7 @@ namespace HelixServiceUI.UserAuthentication
             try
             {
                 // Set this user's state for a delete commit.
-                user.State = ObjectState.Delete;
+                user.Action = DatabaseAction.Delete;
 
                 // User no longer exists. . .
                 user.Commit(WebConfigurationManager.AppSettings["ConnString"]);
@@ -147,7 +147,7 @@ namespace HelixServiceUI.UserAuthentication
                 if (isEdit)
                 {
                     // Set this user's state for an update commit.
-                    user.State = ObjectState.Update;
+                    user.Action = DatabaseAction.Update;
 
                     // Update user credentials.
                     user.Commit(WebConfigurationManager.AppSettings["ConnString"]);

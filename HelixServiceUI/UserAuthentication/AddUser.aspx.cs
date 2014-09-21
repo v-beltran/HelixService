@@ -97,7 +97,7 @@ namespace HelixServiceUI.UserAuthentication
                 user.UserName = this.txtUsername.Text;
                 user.UserSalt = HCryptography.BytesToHexString(HCryptography.GetRandomSalt(256));
                 user.UserPassword = HCryptography.GetHashString(this.txtPassword.Text, user.UserSalt, 256);
-                user.State = ObjectState.Insert;
+                user.Action = DatabaseAction.Insert;
                 user.Commit(WebConfigurationManager.AppSettings["ConnString"]);
 
                 // Display success message.

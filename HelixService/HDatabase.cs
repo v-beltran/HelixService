@@ -37,12 +37,12 @@ namespace HelixService.Utility
     }
 
     /// <summary>
-    /// Named states to easily indicate what type
-    /// of action will be committed to an object.
+    /// Named actions to easily indicate what type
+    /// of transaction will be committed to an object.
     /// </summary>
-    public enum ObjectState
+    public enum DatabaseAction
     {
-        Clean = 0,
+        DoNothing = 0,
         Insert = 1,
         Update = 2,
         Delete = 3
