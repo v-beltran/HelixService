@@ -11,6 +11,28 @@ namespace HelixServiceUI.UserAuthentication
 {
     public partial class updateuser : System.Web.UI.Page
     {
+
+        #region " Properties "
+
+        // Get/set list of users from database.
+        public List<User> UserList 
+        {
+            get 
+            { 
+                if((List<User>)Session["User_List"] == null)
+                {
+                    Session["User_List"] = UserAuthentication.User.LoadCollection(WebConfigurationManager.AppSettings["ConnString"], new UserFilter());
+                }
+                return (List<User>)Session["User_List"];
+            }
+            set 
+            {
+                Session["User_List"] = value;
+            }
+        }
+
+        #endregion
+
         #region " Page Events "
 
         protected void Page_Init(object sender, EventArgs e)
@@ -41,11 +63,11 @@ namespace HelixServiceUI.UserAuthentication
         {
             try
             {
-                // Grab all the users from the database.
-                List<User> users = UserAuthentication.User.LoadCollection(WebConfigurationManager.AppSettings["ConnString"], new UserFilter());
+                // Remove old data source.
+                this.UserList = null;
 
                 // Bind the list of users retrieved.
-                this.rUsers.DataSource = users;
+                this.rUsers.DataSource = this.UserList;
                 this.rUsers.DataBind();
             }
             catch
@@ -63,11 +85,8 @@ namespace HelixServiceUI.UserAuthentication
         /// </summary>
         protected void rUsers_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
-            // Set user fields from the selected item row.
-            User user = new User() { Guid = Guid.Parse(HString.SafeTrim(e.CommandArgument)) };
-            user.UserName = ((Label)e.Item.FindControl("lblUserName")).Text;
-            user.UserPassword = ((Label)e.Item.FindControl("lblPassword")).Text;
-            user.UserSalt = ((HiddenField)e.Item.FindControl("lblSalt")).Value;
+            // Get user from selected row.
+            User user = this.UserList.FirstOrDefault(x => x.Guid.Equals(Guid.Parse(e.CommandArgument.ToString())));
 
             // Do something depending on the button clicked.
             switch (e.CommandName)
@@ -96,7 +115,7 @@ namespace HelixServiceUI.UserAuthentication
             try
             {
                 // Set this user's state for a delete commit.
-                user.Action = DatabaseAction.Delete;
+                user.State = ObjectState.ToBeDeleted;
 
                 // User no longer exists. . .
                 user.Commit(WebConfigurationManager.AppSettings["ConnString"]);
@@ -119,14 +138,8 @@ namespace HelixServiceUI.UserAuthentication
         {
             try
             {
-                // Flag that determines when to commit an update.
-                Boolean isEdit = false;
-
-                // Set current username to check if we need to commit any changes.
-                String currentName = user.UserName;
-
-                // Get username from the corresponding textbox field on this data row.
-                user.UserName = HString.SafeTrim(((TextBox)e.Item.FindControl("txtUserName")).Text);
+                // Set username entered to check if we need to commit any changes.
+                String newUsername = HString.SafeTrim(((TextBox)e.Item.FindControl("txtUserName")).Text);
 
                 // If a new password is entered, update it.
                 if (((TextBox)e.Item.FindControl("txtPassword")).Text.Length > 0)
@@ -134,27 +147,20 @@ namespace HelixServiceUI.UserAuthentication
                     // Generate a new salt and create a new password hash.
                     user.UserSalt = HCryptography.BytesToHexString(HCryptography.GetRandomSalt(256));
                     user.UserPassword = HCryptography.GetHashString(HString.SafeTrim(((TextBox)e.Item.FindControl("txtPassword")).Text), user.UserSalt, 256);
-                    isEdit = true;
                 }
 
                 // Check if the username has been modified and that it is unique in the database.
-                if (!String.IsNullOrEmpty(user.UserName) && !currentName.Equals(user.UserName) && this.ValidUsername(user.UserName))
+                if (!String.IsNullOrEmpty(user.UserName) && this.ValidUsername(newUsername))
                 {
-                    isEdit = true;
+                    // Get username from the corresponding textbox field on this data row.
+                    user.UserName = HString.SafeTrim(((TextBox)e.Item.FindControl("txtUserName")).Text);
                 }
 
-                // Finally, commit any changes, if necessary.
-                if (isEdit)
-                {
-                    // Set this user's state for an update commit.
-                    user.Action = DatabaseAction.Update;
+                // Update user credentials.
+                user.Commit(WebConfigurationManager.AppSettings["ConnString"]);
 
-                    // Update user credentials.
-                    user.Commit(WebConfigurationManager.AppSettings["ConnString"]);
-
-                    // Rebind data.
-                    this.SetUserTable();
-                }
+                // Rebind data.
+                this.SetUserTable();
 
                 // Toggle item row, regardless if we can update user or not.
                 this.ToggleDataRow(e, true);
@@ -194,6 +200,8 @@ namespace HelixServiceUI.UserAuthentication
         /// <returns></returns>
         private Boolean ValidUsername(String name)
         {
+            Boolean valid = false;
+
             try
             {
                 // Filter users by username.
@@ -204,13 +212,15 @@ namespace HelixServiceUI.UserAuthentication
 
                 // A valid username is one that does not exist in the database yet.
                 if (users.Count == 0)
-                    return true;
-                else
-                    return false;
+                {
+                    valid = true;
+                }
+
+                return valid;
             }
             catch
             {
-                return false;
+                return valid;
             }
         }
 

@@ -35,16 +35,4 @@ namespace HelixService.Utility
             return dt;
         }
     }
-
-    /// <summary>
-    /// Named actions to easily indicate what type
-    /// of transaction will be committed to an object.
-    /// </summary>
-    public enum DatabaseAction
-    {
-        DoNothing = 0,
-        Insert = 1,
-        Update = 2,
-        Delete = 3
-    }
 }

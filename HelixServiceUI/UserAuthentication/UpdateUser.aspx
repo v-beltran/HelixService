@@ -64,6 +64,7 @@
                         </div>
                     </td>
                 </tr>
+                <asp:HiddenField ID="hdnfield" runat="server" Value='<%# Container.DataItem %>' />
             </ItemTemplate>
             <FooterTemplate>
                 </table>

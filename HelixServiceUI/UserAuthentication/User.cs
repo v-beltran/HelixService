@@ -19,31 +19,62 @@ namespace HelixServiceUI.UserAuthentication
         private String _user_password;
         private String _user_salt;
 
+        /// <summary>
+        /// The unique identifier for the user.
+        /// </summary>
         public Guid Guid
         {
             get { return this._guid; }
-            set { this._guid = value; }
+            set 
+            {
+                if (this.State == ObjectState.Unchanged && this._guid != value) { this.State = ObjectState.ToBeUpdated; }
+                this._guid = value; 
+            }
         }
 
+        /// <summary>
+        /// The name the user logins with.
+        /// </summary>
         public String UserName
         {
             get { return this._user_name; }
-            set { this._user_name = value; }
+            set 
+            {
+                if (this.State == ObjectState.Unchanged && this._user_name != value) { this.State = ObjectState.ToBeUpdated; }
+                this._user_name = value; 
+            }
         }
 
+        /// <summary>
+        /// The hashed password used for authentication.
+        /// </summary>
         public String UserPassword
         {
             get { return this._user_password; }
-            set { this._user_password = value; }
+            set 
+            {
+                if (this.State == ObjectState.Unchanged && this._user_password != value) { this.State = ObjectState.ToBeUpdated; }
+                this._user_password = value; 
+            }
         }
 
+        /// <summary>
+        /// The salt used to further encrypt the password.
+        /// </summary>
         public String UserSalt
         {
             get { return this._user_salt; }
-            set { this._user_salt = value; }
+            set 
+            {
+                if (this.State == ObjectState.Unchanged && this._user_salt != value) { this.State = ObjectState.ToBeUpdated; }
+                this._user_salt = value; 
+            }
         }
 
-        public DatabaseAction Action { get; set; }
+        /// <summary>
+        /// The state of the object for SQL-related transactions.
+        /// </summary>
+        public ObjectState State { get; set; }
 
         #endregion
 
@@ -58,7 +89,7 @@ namespace HelixServiceUI.UserAuthentication
             this.UserName = String.Empty;
             this.UserPassword = String.Empty;
             this.UserSalt = String.Empty;
-            this.Action = DatabaseAction.DoNothing;
+            this.State = ObjectState.ToBeInserted;
         }
 
         /// <summary>
@@ -71,7 +102,7 @@ namespace HelixServiceUI.UserAuthentication
             this.UserName = HString.SafeTrim(dr["user_name"]);
             this.UserPassword = HString.SafeTrim(dr["user_password"]);
             this.UserSalt = HString.SafeTrim(dr["user_salt"]);
-            this.Action = DatabaseAction.DoNothing;
+            this.State = ObjectState.Unchanged;
         }
 
         #endregion
@@ -88,15 +119,15 @@ namespace HelixServiceUI.UserAuthentication
             {
                 cn.Open();
 
-                switch (this.Action)
+                switch (this.State)
                 {
-                    case DatabaseAction.Insert:
+                    case ObjectState.ToBeInserted:
                         this.InsertObject(cn);
                         break;
-                    case DatabaseAction.Update:
+                    case ObjectState.ToBeUpdated:
                         this.UpdateObject(cn);
                         break;
-                    case DatabaseAction.Delete:
+                    case ObjectState.ToBeDeleted:
                         this.DeleteObject(cn);
                         break;
                     default:

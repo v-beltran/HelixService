@@ -2,21 +2,13 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 
 namespace HelixService.Utility
 {
     public class HDateTime
     {
-        public enum WeekOfMonth
-        {
-            First = 0,
-            Second = 1,
-            Third = 2,
-            Fourth = 3,
-            Last = 4
-        }
-
         /// <summary>
         /// Try to get the datetime from an object.
         /// </summary>
@@ -111,7 +103,7 @@ namespace HelixService.Utility
         /// <returns>The total number of weeks in a month.</returns>
         public static Int32 GetNumberOfWeeks(DateTime dt, DayOfWeek startOfWeek)
         {
-            return HDateTime.GetWeekNumberOfYear(HDateTime.LastOfMonth(dt), DayOfWeek.Sunday) - HDateTime.GetWeekNumberOfYear(HDateTime.FirstOfMonth(dt), DayOfWeek.Sunday) + 1;
+            return HDateTime.GetWeekOfYear(HDateTime.LastOfMonth(dt), DayOfWeek.Sunday) - HDateTime.GetWeekOfYear(HDateTime.FirstOfMonth(dt), DayOfWeek.Sunday) + 1;
         }
 
         /// <summary>
@@ -243,12 +235,12 @@ namespace HelixService.Utility
         }
 
         /// <summary>
-        /// Get the week number in the year.
+        /// Get the week number (x out of 52) of the year.
         /// </summary>
         /// <param name="dt">The given date to evaluate.</param>
         /// <param name="startOfWeek">The start day of the week.</param>
-        /// <returns></returns>
-        public static Int32 GetWeekNumberOfYear(DateTime dt, DayOfWeek startOfWeek)
+        /// <returns>The week of the year.</returns>
+        public static Int32 GetWeekOfYear(DateTime dt, DayOfWeek startOfWeek)
         {
             return CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(dt, CalendarWeekRule.FirstDay, startOfWeek);
         }
@@ -337,6 +329,67 @@ namespace HelixService.Utility
 
             // If adding too many days in the current month takes us to next month, go back a week.
             return newDate.Month != currentDate.Month ? newDate.AddDays(-7) : newDate;
+        }
+
+        /// <summary>
+        /// Determines if the string is a valid date (MM/dd/yyyy).
+        /// </summary>
+        /// <param name="value">The string to test.</param>
+        /// <param name="formats">The format(s) the date should be in.</param>
+        /// <returns>True/False</returns>
+        public static Boolean IsValidDate(String value, params String[] formats)
+        {
+            Boolean valid = false;
+            DateTime dt = new DateTime();
+
+            if (DateTime.TryParseExact(value, formats, null, DateTimeStyles.None, out dt))
+            {
+                valid = true;
+            }
+
+            return valid;
+        }
+
+        /// <summary>
+        /// Determines if the string is a valid date between 1900 and the current date (MM/dd/yyyy).
+        /// </summary>
+        /// <param name="value">The string to test.</param>
+        /// <param name="formats">The format(s) the date should be in.</param>
+        /// <returns>True/False</returns>
+        public static Boolean IsValidDateOfBirth(String value, params String[] formats)
+        {
+            Boolean valid = false;
+            DateTime dt = new DateTime();
+
+            if (DateTime.TryParseExact(value, formats, null, DateTimeStyles.None, out dt))
+            {
+                if(dt.Year >= 1900 && dt <= DateTime.Now)
+                {
+                    valid = true;
+                }
+            }
+
+            return valid;
+        }
+
+        /// <summary>
+        /// Determines if the string is a valid time in standard format.
+        /// </summary>
+        /// <param name="value">The string to test.</param>
+        /// <returns>True/False</returns>
+        public static Boolean IsValidStandardTime(String value)
+        {
+            return Regex.IsMatch(value, @"^(1[012]|[1-9]):[0-5][0-9](\s)?(?i)(am|pm)$");
+        }
+
+        /// <summary>
+        /// Determines if the string is a valid time in military format.
+        /// </summary>
+        /// <param name="value">The string to test.</param>
+        /// <returns>True/False</returns>
+        public static Boolean IsValidMilitaryTime(String value)
+        {
+            return Regex.IsMatch(value, @"^(?:[01][0-9]|2[0-3]):?[0-5][0-9]$");
         }
     }
 }

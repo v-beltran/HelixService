@@ -62,6 +62,9 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="CalendarXSLT\Default.aspx" />
+    <Content Include="InputValidationCSharp\Default.aspx" />
+    <Content Include="InputValidationJS\Default.aspx" />
+    <Content Include="InputValidationJS\validator.js" />
     <Content Include="js\jquery-1.11.1.min.js" />
     <Content Include="SearchAJAX\Default.aspx" />
     <Content Include="UserAuthentication\AddUser.aspx" />
@@ -81,6 +84,20 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CalendarXSLT\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="InputValidationCSharp\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="InputValidationCSharp\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="InputValidationJS\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="InputValidationJS\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="SearchAJAX\Default.aspx.cs">
@@ -151,9 +168,7 @@
       <Name>HelixService</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="css\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>

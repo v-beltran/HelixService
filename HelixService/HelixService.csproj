@@ -65,6 +65,7 @@
     <Compile Include="HDataTable.cs" />
     <Compile Include="HDateTime.cs" />
     <Compile Include="HEncoding.cs" />
+    <Compile Include="HEnumeration.cs" />
     <Compile Include="HFile.cs" />
     <Compile Include="HImage.cs" />
     <Compile Include="HList.cs" />

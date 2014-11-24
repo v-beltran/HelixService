@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 
@@ -108,6 +109,58 @@ namespace HelixService.Utility
         }
 
         /// <summary>
+        /// Gets a currency value, which will default to '0' from an invalid value.
+        /// </summary>
+        /// <param name="value">The decimal to be parsed.</param>
+        /// <param name="cultureInfo">The currency of a culture.</param>
+        /// <returns>The currency from the given culture.</returns>
+        public static Decimal GetSafeCurrency(Object value, CultureInfo cultureInfo)
+        {
+            Decimal currency = 0;
+            if (value == null)
+            {
+                return 0;
+            }
+            else
+            {
+                if (Decimal.TryParse(value.ToString(), NumberStyles.Currency, cultureInfo, out currency))
+                {
+                    return currency;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Gets a currency value, which will default to null from an invalid value.
+        /// </summary>
+        /// <param name="value">The decimal to be parsed.</param>
+        /// <param name="cultureInfo">The currency of a culture.</param>
+        /// <returns>The currency from the given culture.</returns>
+        public static Decimal? GetNullableCurrency(Object value, CultureInfo cultureInfo)
+        {
+            Decimal currency = 0;
+            if (value == null)
+            {
+                return null;
+            }
+            else
+            {
+                if (Decimal.TryParse(value.ToString(), NumberStyles.Currency, cultureInfo, out currency))
+                {
+                    return new Decimal?(currency);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
         /// Determine if a number is divisble by another number.
         /// </summary>
         /// <param name="a">The number to divide.</param>
@@ -117,5 +170,6 @@ namespace HelixService.Utility
         {
             return (a % b) == 0;
         }
+
     }
 }

@@ -64,6 +64,8 @@ namespace HelixServiceUI.UserAuthentication
         /// <returns></returns>
         private Boolean ValidUsername()
         {
+            Boolean valid = false;
+
             try
             {
                 // Filter users by username.
@@ -74,13 +76,15 @@ namespace HelixServiceUI.UserAuthentication
 
                 // A valid username is one that does not exist in the database yet.
                 if (users.Count == 0)
-                    return true;
-                else
-                    return false;
+                {
+                    valid = true;
+                }
+
+                return valid;
             }
             catch
             {
-                return false;
+                return valid;
             }
         }
 
@@ -97,7 +101,6 @@ namespace HelixServiceUI.UserAuthentication
                 user.UserName = this.txtUsername.Text;
                 user.UserSalt = HCryptography.BytesToHexString(HCryptography.GetRandomSalt(256));
                 user.UserPassword = HCryptography.GetHashString(this.txtPassword.Text, user.UserSalt, 256);
-                user.Action = DatabaseAction.Insert;
                 user.Commit(WebConfigurationManager.AppSettings["ConnString"]);
 
                 // Display success message.
