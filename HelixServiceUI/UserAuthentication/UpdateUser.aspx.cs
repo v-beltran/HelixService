@@ -150,7 +150,7 @@ namespace HelixServiceUI.UserAuthentication
                 }
 
                 // Check if the username has been modified and that it is unique in the database.
-                if (!String.IsNullOrEmpty(user.UserName) && this.ValidUsername(newUsername))
+                if (!String.IsNullOrEmpty(newUsername) && this.ValidUsername(newUsername))
                 {
                     // Get username from the corresponding textbox field on this data row.
                     user.UserName = HString.SafeTrim(((TextBox)e.Item.FindControl("txtUserName")).Text);
