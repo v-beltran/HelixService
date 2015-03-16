@@ -30,6 +30,9 @@ namespace HelixServiceUI.CalendarXSLT
             this.InitControls();
         }
 
+        /// <summary>
+        /// Initialize UI controls.
+        /// </summary>
         private void InitControls()
         {
             // Populate "Year" dropdown.
@@ -71,12 +74,12 @@ namespace HelixServiceUI.CalendarXSLT
         /// <returns>A memory stream of the created xml.</returns>
         public MemoryStream GetCalendarXml(DateTime dt)
         {
-            // Get holidays for the month.
-            Dictionary<DateTime, String> holidays = HDateTime.GetHolidaysInMonth(dt);
-
             // Create xml writer.
             MemoryStream ms = new MemoryStream();
             XmlWriter xml = HXml.GetXmlWriter(ms);
+
+            // Get holidays for the month.
+            Dictionary<DateTime, String> holidays = HDateTime.GetHolidaysInMonth(dt);
 
             // Set the first of the month.
             DateTime startofMonth = HDateTime.FirstOfMonth(dt);

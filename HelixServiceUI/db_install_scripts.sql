@@ -1,7 +1,7 @@
 ﻿/****************************************
 Use: UserAuthentication Demo
 *****************************************/
-CREATE TABLE USER_MASTER(
+CREATE TABLE User_Master(
 user_master_guid uniqueidentifier not null,
 user_name nvarchar(50) not null,
 user_password nvarchar(512) not null,

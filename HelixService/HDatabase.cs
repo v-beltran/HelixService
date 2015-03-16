@@ -15,7 +15,7 @@ namespace HelixService.Utility
         /// <param name="cn">The connection string to the database.</param>
         /// <param name="select">The command to select from the database.</param>
         /// <returns></returns>
-        public static DataTable GetDataTable(SqlConnection cn, SqlCommand select)
+        public static DataTable FillDataTable(SqlConnection cn, SqlCommand select)
         {
             DataTable dt = new DataTable();
 

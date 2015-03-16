@@ -121,11 +121,23 @@
         <div id="divCalendar" runat="server"></div>
     </form>
     <script type="text/javascript">
-        // Set postback links for previous and next month.
+        // Get month attribute to set postback links.
         var prevMonth = $("#prev").attr("data-month");
         var nextMonth = $("#next").attr("data-month");
-        $("#prev").attr("href", "javascript:__doPostBack('prev','" + prevMonth + "')");
-        $("#next").attr("href", "javascript:__doPostBack('next','" + nextMonth + "')");
+
+        if (nextMonth.substring(0, 4) == "2051") {
+            // "Year" dropdown can only go as high as 2050. Hide the next arrow.
+            $("#next").hide();
+        }
+        else if (prevMonth.substring(0, 4) == "1999") {
+            // "Year" dropdown can only go as low as 2000. Hide the previous arrow.
+            $("#prev").hide();
+        }
+        else {
+            // Set postback links for previous and next month.
+            $("#prev").attr("href", "javascript:__doPostBack('prev','" + prevMonth + "')");
+            $("#next").attr("href", "javascript:__doPostBack('next','" + nextMonth + "')");
+        }
 
         // Add CSS class for today.
         $(".event").each(function () {

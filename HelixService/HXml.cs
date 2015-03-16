@@ -113,6 +113,17 @@ namespace HelixService.Utility
             xslTransform.Transform(xmlInput, xsltArguments, results);
             return results;
         }
-        
+
+        /// <summary>
+        /// Gets the inner text of the first XmlNode that matches the XPath expression.  
+        /// </summary>
+        /// <param name="node"></param>
+        /// <param name="xpath"></param>
+        /// <returns></returns>
+        public static String GetNodeInnerText(XmlNode node, String xpath)
+        {
+            XmlNode selectNode = node.SelectSingleNode(xpath);
+            return (selectNode != null) ? selectNode.InnerText : String.Empty;
+        }
     }
 }

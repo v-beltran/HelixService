@@ -60,6 +60,9 @@ namespace HelixServiceUI.UserAuthentication
         /// <returns>True/False</returns>
         private Boolean ValidUser(out User user)
         {
+            Boolean valid = false;
+            user = null;
+
             try
             {
                 // Find the user by their username, since this should be unique.
@@ -68,18 +71,18 @@ namespace HelixServiceUI.UserAuthentication
 
                 // Attempt to re-create their hash with the given password and the salt saved in the database.
                 String passwordHash = HCryptography.GetHashString(this.txtPassword.Text, user.UserSalt, 256);
+                
+                if (user != null && user.UserPassword.Equals(passwordHash))
+                {
+                    // If the hash matches what is in the database, the password is valid.
+                    valid = true;
+                }
 
-                // If the hash matches what is in the database, the password is valid.
-                if (user.UserPassword.Equals(passwordHash))
-                    return true;
-                else
-                    return false;
+                return valid;
             }
             catch
             {
-                // Don't return anything valid.
-                user = null;
-                return false;
+                    return valid;
             }
         }
 

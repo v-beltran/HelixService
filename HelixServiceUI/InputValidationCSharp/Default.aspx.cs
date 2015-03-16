@@ -26,6 +26,10 @@ namespace HelixServiceUI.FormValidationCSharp
             }
         }
 
+        /// <summary>
+        /// Determine that the form is valid by checking each input.
+        /// </summary>
+        /// <returns></returns>
         private Boolean IsValidForm()
         {
             Boolean valid = true;

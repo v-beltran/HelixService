@@ -49,6 +49,23 @@ namespace HelixService.Utility
         }
 
         /// <summary>
+        /// Safely trims a string from object and checks for special characters.
+        /// </summary>
+        /// <param name="value">The object to set string and trim.</param>
+        /// <returns></returns>
+        public static String CsvSafeTrim(Object value)
+        {
+            String newValue = HString.SafeTrim(value);
+
+            if (newValue.IndexOfAny(new char[] { '"', ',' }) != -1)
+            {
+                newValue = String.Format("\"{0}\"", newValue.Replace("\"", "\"\""));
+            }
+
+            return newValue;
+        }
+
+        /// <summary>
         /// Removes characters from the beginning of the string.
         /// </summary>
         /// <param name="value">The string to be shortened.</param>

@@ -62,6 +62,11 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="CalendarXSLT\Default.aspx" />
+    <Content Include="DataTransforms\CSVtoXML\Default.aspx" />
+    <Content Include="DataTransforms\XMLtoCSV\Default.aspx" />
+    <Content Include="DataTransforms\XMLtoCSV\employees.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="InputValidationCSharp\Default.aspx" />
     <Content Include="InputValidationJS\Default.aspx" />
     <Content Include="InputValidationJS\validator.js" />
@@ -84,6 +89,20 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CalendarXSLT\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DataTransforms\CSVtoXML\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DataTransforms\CSVtoXML\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DataTransforms\XMLtoCSV\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DataTransforms\XMLtoCSV\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="InputValidationCSharp\Default.aspx.cs">
@@ -155,6 +174,7 @@
   <ItemGroup>
     <Content Include="ImageTransform\Image.ashx" />
     <Content Include="SearchAJAX\Search.ashx" />
+    <Content Include="DataTransforms\CSVtoXML\employees.csv" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

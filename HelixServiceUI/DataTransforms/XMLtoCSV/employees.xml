@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<employees>
+  <employee>
+    <id>6657</id>
+    <first-name>Megan</first-name>
+    <last-name>Lee</last-name>
+    <title>Dental Assistant</title>
+    <date-of-birth>02/21/1952</date-of-birth>
+    <contact>
+      <address>
+        <state>Arizona</state>
+        <city>Scottsdale</city>        
+        <street>3174 Hillside Street</street>
+        <zip>85251</zip>
+      </address>
+      <phone>480-441-9219</phone>
+      <email>MeganJLee@armyspy.com</email>
+    </contact>
+  </employee>
+  <employee>
+    <id>9042</id>
+    <first-name>George</first-name>
+    <last-name>Hicks</last-name>
+    <title>Business Administrator</title>
+    <date-of-birth>08/19/1947</date-of-birth>
+    <contact>
+      <address>
+        <state>Colorado</state>
+        <city>Denver</city>
+        <street>1695 Davis Lane</street>
+        <zip>80202</zip>
+      </address>
+      <phone>720-359-2822</phone>
+      <email>GeorgeKHicks@jourrapide.com</email>
+    </contact>
+  </employee>
+  <employee>
+    <id>7667</id>
+    <first-name>Ann "Marie"</first-name>
+    <last-name>Gilmore</last-name>
+    <title>Recruiter, Human Resources Manager</title>
+    <date-of-birth>04/25/1980</date-of-birth>
+    <contact>
+      <address>
+        <state>North Carolina</state>
+        <city>Asheville</city>
+        <street>1135 Watson Lane</street>
+        <zip>28803</zip>
+      </address>
+      <phone>828-775-4334</phone>
+      <email>AnnMGilmore@rhyta.com</email>
+    </contact>
+  </employee>
+  <employee>
+    <id>8013</id>
+    <first-name>Robert</first-name>
+    <last-name>Amezquita</last-name>
+    <title>Tax Accountant</title>
+    <date-of-birth>01/31/1969</date-of-birth>
+    <contact>
+      <address>
+        <state>Georgia</state>
+        <city>Suches</city>
+        <street>4943 Radio Park Drive</street>
+        <zip>30572</zip>
+      </address>
+      <phone>706-466-6919</phone>
+      <email>RobertJAmezquita@dayrep.com</email>
+    </contact>
+  </employee>
+</employees>

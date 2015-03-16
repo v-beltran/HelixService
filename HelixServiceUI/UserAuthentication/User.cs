@@ -214,7 +214,7 @@ namespace HelixServiceUI.UserAuthentication
         public static User Load(String connectionString, UserFilter filter)
         {
             List<User> users = User.LoadCollection(connectionString, filter);
-            return users.Count > 0 ? users[0] : new User();
+            return users.Count > 0 ? users[0] : null;
         }
 
         /// <summary>
@@ -261,7 +261,7 @@ namespace HelixServiceUI.UserAuthentication
 
             using (SqlConnection cn = new SqlConnection(connectionString))
             {
-                using (DataTable dt = HDatabase.GetDataTable(cn, cmd))
+                using (DataTable dt = HDatabase.FillDataTable(cn, cmd))
                 {
                     foreach (DataRow dr in dt.Rows)
                     {

@@ -143,7 +143,7 @@ namespace HelixServiceUI.SearchAJAX
 
             using (SqlConnection cn = new SqlConnection(connectionString))
             {
-                using (DataTable dt = HDatabase.GetDataTable(cn, cmd))
+                using (DataTable dt = HDatabase.FillDataTable(cn, cmd))
                 {
                     foreach (DataRow dr in dt.Rows)
                     {
