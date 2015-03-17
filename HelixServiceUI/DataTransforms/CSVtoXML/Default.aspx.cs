@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -24,10 +25,10 @@ namespace HelixServiceUI.DataTransforms.CSVtoXML
             // Parse the CSV file into an array list.
             ArrayList employees = HList.ToCSVList(reader);
 
-            // Initialize a string writer to output xml at the end.
-            StringWriter xmlString = new StringWriter();
+            // Initialize a memory to output xml at the end.
+            MemoryStream ms = new MemoryStream();
 
-            using (XmlTextWriter xml = new XmlTextWriter(xmlString))
+            using (XmlTextWriter xml = new XmlTextWriter(ms, Encoding.UTF8))
             {
                 // Root.
                 xml.WriteStartDocument();
@@ -43,13 +44,15 @@ namespace HelixServiceUI.DataTransforms.CSVtoXML
                 // End.
                 xml.WriteEndElement();
                 xml.WriteEndDocument();
+                xml.Flush();
+                ms.Position = 0;
             }
 
             // Set content type and header for output.
             Response.Clear();
             Response.ContentType = "text/xml";
             Response.AddHeader("Content-Disposition", "attachment;filename=employees.xml");
-            Response.Write(xmlString.ToString());
+            Response.BinaryWrite(ms.ToArray());
             Response.End();
         }
 

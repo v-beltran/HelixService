@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Xml;
+using System.Xml.XPath;
 using System.Xml.Xsl;
 
 namespace HelixService.Utility
@@ -115,15 +116,15 @@ namespace HelixService.Utility
         }
 
         /// <summary>
-        /// Gets the inner text of the first XmlNode that matches the XPath expression.  
+        /// Gets the value of the first XmlNode that matches the XPath expression.  
         /// </summary>
-        /// <param name="node"></param>
-        /// <param name="xpath"></param>
+        /// <param name="xpn">The cursor for navigating the xml.</param>
+        /// <param name="xpath">The path to the node.</param>
         /// <returns></returns>
-        public static String GetNodeInnerText(XmlNode node, String xpath)
+        public static String SelectNodeValue(XPathNavigator xpn, String xpath)
         {
-            XmlNode selectNode = node.SelectSingleNode(xpath);
-            return (selectNode != null) ? selectNode.InnerText : String.Empty;
+            XPathNavigator selectNode = xpn.SelectSingleNode(xpath);
+            return (selectNode != null) ? selectNode.Value : String.Empty;
         }
     }
 }

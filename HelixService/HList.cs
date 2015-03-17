@@ -19,64 +19,67 @@ namespace HelixService.Utility
         {
             ArrayList lines = new ArrayList();
             String currentLine = String.Empty;
-            while ((currentLine = reader.ReadLine()) != null)
+            using (reader)
             {
-                List<String> columns = new List<String>();
-                Int32 pos = 0;
-
-                while (pos < currentLine.Length)
+                while ((currentLine = reader.ReadLine()) != null)
                 {
-                    String value;
+                    List<String> columns = new List<String>();
+                    Int32 pos = 0;
 
-                    // Special handling for quoted field.
-                    if (currentLine[pos] == '"')
+                    while (pos < currentLine.Length)
                     {
-                        // Skip initial quote.
-                        pos++;
+                        String value;
 
-                        // Parse quoted value.
-                        int start = pos;
-                        while (pos < currentLine.Length)
+                        // Special handling for quoted field.
+                        if (currentLine[pos] == '"')
                         {
-                            // Test for quote character.
-                            if (currentLine[pos] == '"')
-                            {
-                                // Found one
-                                pos++;
-
-                                // If two quotes together, keep one.
-                                // Otherwise, indicates end of value.
-                                if (pos >= currentLine.Length || currentLine[pos] != '"')
-                                {
-                                    pos--;
-                                    break;
-                                }
-                            }
+                            // Skip initial quote.
                             pos++;
+
+                            // Parse quoted value.
+                            int start = pos;
+                            while (pos < currentLine.Length)
+                            {
+                                // Test for quote character.
+                                if (currentLine[pos] == '"')
+                                {
+                                    // Found one
+                                    pos++;
+
+                                    // If two quotes together, keep one.
+                                    // Otherwise, indicates end of value.
+                                    if (pos >= currentLine.Length || currentLine[pos] != '"')
+                                    {
+                                        pos--;
+                                        break;
+                                    }
+                                }
+                                pos++;
+                            }
+                            value = currentLine.Substring(start, pos - start);
+                            value = value.Replace("\"\"", "\"");
                         }
-                        value = currentLine.Substring(start, pos - start);
-                        value = value.Replace("\"\"", "\"");
-                    }
-                    else
-                    {
-                        // Parse unquoted value.
-                        int start = pos;
+                        else
+                        {
+                            // Parse unquoted value.
+                            int start = pos;
+                            while (pos < currentLine.Length && currentLine[pos] != ',')
+                                pos++;
+                            value = currentLine.Substring(start, pos - start);
+                        }
+
+                        // Eat up to and including next comma.
                         while (pos < currentLine.Length && currentLine[pos] != ',')
                             pos++;
-                        value = currentLine.Substring(start, pos - start);
+                        if (pos < currentLine.Length)
+                            pos++;
+
+                        columns.Add(value);
                     }
 
-                    // Eat up to and including next comma.
-                    while (pos < currentLine.Length && currentLine[pos] != ',')
-                        pos++;
-                    if (pos < currentLine.Length)
-                        pos++;
+                    lines.Add(columns);
 
-                    columns.Add(value);
                 }
-
-                lines.Add(columns);
-
             }
 
             return lines;

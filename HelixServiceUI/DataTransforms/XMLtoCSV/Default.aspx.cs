@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using System.Xml;
+using System.Xml.XPath;
 
 namespace HelixServiceUI.DataTransforms.XMLtoCSV
 {
@@ -21,18 +22,15 @@ namespace HelixServiceUI.DataTransforms.XMLtoCSV
             StringBuilder csvOutput = new StringBuilder();
             csvOutput.AppendLine("Guid, External Id, Name, Title, Birthday, State, City, Address, Zip, Phone, Email");
 
-            // Load employees' xml file.
-            XmlDocument doc = new XmlDocument();
-            doc.Load(xmlFile);
-
-            // Select employees node.
-            XmlNode root = doc.SelectSingleNode("employees");
-            XmlNodeList employeeList = root.SelectNodes("employee");
-
-            // Process each employee.
-            foreach (XmlNode employee in employeeList)
+            // Create XPathDocument and XPathNavigator for employees.
+            XPathDocument doc = new XPathDocument(xmlFile);
+            XPathNavigator navigator = doc.CreateNavigator();
+            XPathNodeIterator iterator = navigator.Select("employees/employee");            
+            
+            foreach (XPathNavigator xpn in iterator)
             {
-                this.TransformEmployee(employee, ref csvOutput);
+                // Process each employee.
+                this.TransformEmployee(xpn, ref csvOutput);
             }
 
             // Set content type and header for output.
@@ -48,15 +46,15 @@ namespace HelixServiceUI.DataTransforms.XMLtoCSV
         /// </summary>
         /// <param name="employee">The employee node.</param>
         /// <param name="transform">The CSV string.</param>
-        private void TransformEmployee(XmlNode employee, ref StringBuilder transform)
+        private void TransformEmployee(XPathNavigator employee, ref StringBuilder transform)
         {
             StringBuilder currentEmployee = new StringBuilder();
             String guid = Guid.NewGuid().ToString();
-            String id = HString.CsvSafeTrim(HXml.GetNodeInnerText(employee, "id"));
-            String firstName = HString.CsvSafeTrim(HXml.GetNodeInnerText(employee, "first-name"));
-            String lastName = HString.CsvSafeTrim(HXml.GetNodeInnerText(employee, "last-name"));
-            String title = HString.CsvSafeTrim(HXml.GetNodeInnerText(employee, "title"));
-            String dateOfBirth = HString.CsvSafeTrim(HXml.GetNodeInnerText(employee, "date-of-birth"));
+            String id = HString.CsvSafeTrim(HXml.SelectNodeValue(employee, "id"));
+            String firstName = HString.CsvSafeTrim(HXml.SelectNodeValue(employee, "first-name"));
+            String lastName = HString.CsvSafeTrim(HXml.SelectNodeValue(employee, "last-name"));
+            String title = HString.CsvSafeTrim(HXml.SelectNodeValue(employee, "title"));
+            String dateOfBirth = HString.CsvSafeTrim(HXml.SelectNodeValue(employee, "date-of-birth"));
             String contact = this.ProcessContact(employee.SelectSingleNode("contact"));
 
             // Set CSV line for this employee.
@@ -71,14 +69,14 @@ namespace HelixServiceUI.DataTransforms.XMLtoCSV
         /// </summary>
         /// <param name="contact">The contact node.</param>
         /// <returns>The contact information of employee.</returns>
-        private String ProcessContact(XmlNode contact) 
+        private String ProcessContact(XPathNavigator contact) 
         {
             StringBuilder currentEmployee = new StringBuilder();
 
             if (contact != null)
             {
-                String phone = HString.CsvSafeTrim(HXml.GetNodeInnerText(contact, "phone"));
-                String email = HString.CsvSafeTrim(HXml.GetNodeInnerText(contact, "email"));
+                String phone = HString.CsvSafeTrim(HXml.SelectNodeValue(contact, "phone"));
+                String email = HString.CsvSafeTrim(HXml.SelectNodeValue(contact, "email"));
                 String address = this.ProcessAddress(contact.SelectSingleNode("address"));
                 currentEmployee.AppendFormat("{0},{1},{2}", address, phone, email);
             }
@@ -91,16 +89,16 @@ namespace HelixServiceUI.DataTransforms.XMLtoCSV
         /// </summary>
         /// <param name="address">The address node.</param>
         /// <returns>The address of employee.</returns>
-        private String ProcessAddress(XmlNode address)
+        private String ProcessAddress(XPathNavigator address)
         {
             StringBuilder currentEmployee = new StringBuilder();
 
             if (address != null)
             {
-                String state = HString.CsvSafeTrim(HXml.GetNodeInnerText(address, "state"));
-                String city = HString.CsvSafeTrim(HXml.GetNodeInnerText(address, "city"));
-                String street = HString.CsvSafeTrim(HXml.GetNodeInnerText(address, "street"));
-                String zip = HString.CsvSafeTrim(HXml.GetNodeInnerText(address, "zip"));
+                String state = HString.CsvSafeTrim(HXml.SelectNodeValue(address, "state"));
+                String city = HString.CsvSafeTrim(HXml.SelectNodeValue(address, "city"));
+                String street = HString.CsvSafeTrim(HXml.SelectNodeValue(address, "street"));
+                String zip = HString.CsvSafeTrim(HXml.SelectNodeValue(address, "zip"));
                 currentEmployee.AppendFormat("{0},{1},{2},{3}", state, city, street, zip);
             }
 
