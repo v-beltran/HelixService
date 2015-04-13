@@ -15,17 +15,17 @@ namespace HelixServiceUI.UserAuthentication
         #region " Properties "
 
         // Get/set list of users from database.
-        public List<User> UserList 
+        public List<User> UserList
         {
-            get 
-            { 
-                if((List<User>)Session["User_List"] == null)
+            get
+            {
+                if ((List<User>)Session["User_List"] == null)
                 {
-                    Session["User_List"] = UserAuthentication.User.LoadCollection(WebConfigurationManager.AppSettings["ConnString"], new UserFilter());
+                    Session["User_List"] = UserAuthentication.User.LoadCollection(HConfig.DBConnectionString, new UserFilter());
                 }
                 return (List<User>)Session["User_List"];
             }
-            set 
+            set
             {
                 Session["User_List"] = value;
             }
@@ -118,14 +118,14 @@ namespace HelixServiceUI.UserAuthentication
                 user.State = ObjectState.ToBeDeleted;
 
                 // User no longer exists. . .
-                user.Commit(WebConfigurationManager.AppSettings["ConnString"]);
+                user.Commit(HConfig.DBConnectionString);
 
                 // Rebind data.
                 this.SetUserTable();
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception("Error: Unable to delete user.");
+                throw new Exception("Error: Unable to delete user.", ex);
             }
         }
 
@@ -157,7 +157,7 @@ namespace HelixServiceUI.UserAuthentication
                 }
 
                 // Update user credentials.
-                user.Commit(WebConfigurationManager.AppSettings["ConnString"]);
+                user.Commit(HConfig.DBConnectionString);
 
                 // Rebind data.
                 this.SetUserTable();
@@ -165,9 +165,9 @@ namespace HelixServiceUI.UserAuthentication
                 // Toggle item row, regardless if we can update user or not.
                 this.ToggleDataRow(e, true);
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception("Error: Unable to update user.");
+                throw new Exception("Error: Unable to update user.", ex);
             }
         }
 
@@ -208,7 +208,7 @@ namespace HelixServiceUI.UserAuthentication
                 UserFilter filter = new UserFilter() { UserName = name };
 
                 // Attempt to load a list of users based on the above filter.
-                List<User> users = UserAuthentication.User.LoadCollection(WebConfigurationManager.AppSettings["ConnString"], filter);
+                List<User> users = UserAuthentication.User.LoadCollection(HConfig.DBConnectionString, filter);
 
                 // A valid username is one that does not exist in the database yet.
                 if (users.Count == 0)

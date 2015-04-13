@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="HBinary.cs" />
     <Compile Include="HBoolean.cs" />
+    <Compile Include="HConfig.cs" />
     <Compile Include="HCryptography.cs" />
     <Compile Include="HDatabase.cs" />
     <Compile Include="HDateTime.cs" />

@@ -72,7 +72,7 @@ namespace HelixServiceUI.UserAuthentication
                 UserFilter filter = new UserFilter() { UserName = this.txtUsername.Text };
 
                 // Attempt to load a list of users based on the above filter.
-                List<User> users = UserAuthentication.User.LoadCollection(WebConfigurationManager.AppSettings["ConnString"], filter);
+                List<User> users = UserAuthentication.User.LoadCollection(HConfig.DBConnectionString, filter);
 
                 // A valid username is one that does not exist in the database yet.
                 if (users.Count == 0)
@@ -101,7 +101,7 @@ namespace HelixServiceUI.UserAuthentication
                 user.UserName = this.txtUsername.Text;
                 user.UserSalt = HCryptography.BytesToHexString(HCryptography.GetRandomSalt(256));
                 user.UserPassword = HCryptography.GetHashString(this.txtPassword.Text, user.UserSalt, 256);
-                user.Commit(WebConfigurationManager.AppSettings["ConnString"]);
+                user.Commit(HConfig.DBConnectionString);
 
                 // Display success message.
                 this.lblStatus.ForeColor = System.Drawing.Color.Green;

@@ -58,6 +58,8 @@
     <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="BinaryHandler\Default.aspx" />
+    <Content Include="BinaryHandler\ViewUploads.aspx" />
     <Content Include="CalendarXSLT\Calendar.xslt">
       <SubType>Designer</SubType>
     </Content>
@@ -67,6 +69,7 @@
     <Content Include="DataTransforms\XMLtoCSV\employees.xml">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Global.asax" />
     <Content Include="InputValidationCSharp\Default.aspx" />
     <Content Include="InputValidationJS\Default.aspx" />
     <Content Include="InputValidationJS\validator.js" />
@@ -84,6 +87,24 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BinaryHandler\Binary.ashx.cs">
+      <DependentUpon>Binary.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="BinaryHandler\Blob.cs" />
+    <Compile Include="BinaryHandler\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BinaryHandler\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="BinaryHandler\ViewUploads.aspx.cs">
+      <DependentUpon>ViewUploads.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="BinaryHandler\ViewUploads.aspx.designer.cs">
+      <DependentUpon>ViewUploads.aspx</DependentUpon>
+    </Compile>
     <Compile Include="CalendarXSLT\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -104,6 +125,9 @@
     </Compile>
     <Compile Include="DataTransforms\XMLtoCSV\Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="InputValidationCSharp\Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -175,6 +199,7 @@
     <Content Include="ImageTransform\Image.ashx" />
     <Content Include="SearchAJAX\Search.ashx" />
     <Content Include="DataTransforms\CSVtoXML\employees.csv" />
+    <Content Include="BinaryHandler\Binary.ashx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

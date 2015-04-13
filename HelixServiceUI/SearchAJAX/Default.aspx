@@ -11,7 +11,7 @@
             // Do not show results, since there was nothing searched for yet.
             $("#divSearchResults").hide();
 
-            // Enter-key press will initiate the AJAX call using the 'Search' button click event.
+            // Enter-key press will initiate the AJAX request using the 'Search' button click event.
             $("#txtSearch").keypress(function (event) {
                 if (event.which === 13) {
                     $('#btnSearch').trigger('click');
@@ -19,12 +19,12 @@
                 }
             });
 
-            // Button click event to use AJAX call.
+            // Button click event to use AJAX request.
             $("#btnSearch").click(function () {
                 GetStates();
             });
 
-            // This function will get search results using an AJAX call.
+            // This function will get search results from an AJAX request.
             function GetStates() {
                 // Get user's search term(s).
                 var searchTerm = $("#txtSearch").val();

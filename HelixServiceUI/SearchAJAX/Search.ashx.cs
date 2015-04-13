@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HelixService.Utility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -30,7 +31,7 @@ namespace HelixServiceUI.SearchAJAX
             StateFilter filter = new StateFilter() { StateCode = searchTerm, StateName = searchTerm };
 
             // Load the states into a list.
-            List<State> states = State.LoadCollection(WebConfigurationManager.AppSettings["ConnString"], filter);
+            List<State> states = State.LoadCollection(HConfig.DBConnectionString, filter);
 
             // Return with a JSON string containing results.
             return jss.Serialize(states);

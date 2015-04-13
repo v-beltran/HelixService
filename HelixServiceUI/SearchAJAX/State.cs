@@ -90,7 +90,7 @@ namespace HelixServiceUI.SearchAJAX
         public static State Load(String connectionString, StateFilter filter)
         {
             List<State> states = State.LoadCollection(connectionString, filter);
-            return states.Count > 0 ? states[0] : new State();
+            return states.Count > 0 ? states[0] : null;
         }
 
         /// <summary>
@@ -103,47 +103,52 @@ namespace HelixServiceUI.SearchAJAX
         {
             List<State> states = new List<State>();
 
-            SqlCommand cmd = new SqlCommand("SELECT * FROM State_Master");
+            SqlCommand select = new SqlCommand("SELECT * FROM State_Master");
             String where = String.Empty;
 
             if (!String.IsNullOrEmpty(filter.StateCode))
             {
-                where += "state_ansi_code LIKE '%' + @state_ansi_code + '%' OR ";
-                cmd.Parameters.AddWithValue("@state_ansi_code", filter.StateCode);
+                where += "state_ansi_code LIKE '%' + @state_ansi_code + '%'";
+                select.Parameters.Add(new SqlParameter("@state_ansi_code", SqlDbType.NVarChar) { Value = filter.StateCode });
             }
 
             if (!String.IsNullOrEmpty(filter.StateName))
             {
-                where += "state_name LIKE '%' + @state_name + '%' OR ";
-                cmd.Parameters.AddWithValue("@state_name", filter.StateName);
+                if (where.Length > 0) { where += " OR "; }
+                where += "state_name LIKE '%' + @state_name + '%'";
+                select.Parameters.Add(new SqlParameter("@state_name", SqlDbType.NVarChar) { Value = filter.StateName });
             }
 
             if (!String.IsNullOrEmpty(filter.StateCapital))
             {
-                where += "state_capital LIKE '%' + @state_capital + '%' OR ";
-                cmd.Parameters.AddWithValue("@state_capital", filter.StateCapital);
+                if (where.Length > 0) { where += " OR "; }
+                where += "state_capital LIKE '%' + @state_capital + '%'";
+                select.Parameters.Add(new SqlParameter("@state_capital", SqlDbType.NVarChar) { Value = filter.StateCapital });
             }
 
             if (!String.IsNullOrEmpty(filter.StateLargestCity))
             {
-                where += "state_largest_city LIKE '%' + @state_largest_city + '%' OR ";
-                cmd.Parameters.AddWithValue("@state_largest_city", filter.StateLargestCity);
+                if (where.Length > 0) { where += " OR "; }
+                where += "state_largest_city LIKE '%' + @state_largest_city + '%'";
+                select.Parameters.Add(new SqlParameter("@state_largest_city", SqlDbType.NVarChar) { Value = filter.StateLargestCity });
             }
 
             if (!String.IsNullOrEmpty(filter.StateLargestMetro))
             {
-                where += "state_largest_metro LIKE '%' + @state_largest_metro + '%' OR ";
-                cmd.Parameters.AddWithValue("@state_largest_metro", filter.StateLargestMetro);
+                if (where.Length > 0) { where += " OR "; }
+                where += "state_largest_metro LIKE '%' + @state_largest_metro + '%'";
+                select.Parameters.Add(new SqlParameter("@state_largest_metro", SqlDbType.NVarChar) { Value = filter.StateLargestMetro });
             }
 
             if (!String.IsNullOrEmpty(where))
             {
-                cmd.CommandText += " WHERE " + where.Remove(where.Length - 4);
+                where = " WHERE " + where;
+                select.CommandText = select.CommandText + where;
             }
 
             using (SqlConnection cn = new SqlConnection(connectionString))
             {
-                using (DataTable dt = HDatabase.FillDataTable(cn, cmd))
+                using (DataTable dt = HDatabase.FillDataTable(cn, select))
                 {
                     foreach (DataRow dr in dt.Rows)
                     {

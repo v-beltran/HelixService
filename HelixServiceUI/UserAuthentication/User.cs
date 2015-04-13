@@ -25,10 +25,10 @@ namespace HelixServiceUI.UserAuthentication
         public Guid Guid
         {
             get { return this._guid; }
-            set 
+            set
             {
                 if (this.State == ObjectState.Unchanged && this._guid != value) { this.State = ObjectState.ToBeUpdated; }
-                this._guid = value; 
+                this._guid = value;
             }
         }
 
@@ -38,10 +38,10 @@ namespace HelixServiceUI.UserAuthentication
         public String UserName
         {
             get { return this._user_name; }
-            set 
+            set
             {
                 if (this.State == ObjectState.Unchanged && this._user_name != value) { this.State = ObjectState.ToBeUpdated; }
-                this._user_name = value; 
+                this._user_name = value;
             }
         }
 
@@ -51,10 +51,10 @@ namespace HelixServiceUI.UserAuthentication
         public String UserPassword
         {
             get { return this._user_password; }
-            set 
+            set
             {
                 if (this.State == ObjectState.Unchanged && this._user_password != value) { this.State = ObjectState.ToBeUpdated; }
-                this._user_password = value; 
+                this._user_password = value;
             }
         }
 
@@ -64,10 +64,10 @@ namespace HelixServiceUI.UserAuthentication
         public String UserSalt
         {
             get { return this._user_salt; }
-            set 
+            set
             {
                 if (this.State == ObjectState.Unchanged && this._user_salt != value) { this.State = ObjectState.ToBeUpdated; }
-                this._user_salt = value; 
+                this._user_salt = value;
             }
         }
 
@@ -147,16 +147,16 @@ namespace HelixServiceUI.UserAuthentication
             {
                 using (SqlCommand cmd = new SqlCommand("INSERT INTO User_Master (user_master_guid, user_name, user_password, user_salt) VALUES (@user_master_guid, @user_name, @user_password, @user_salt)", cn))
                 {
-                    cmd.Parameters.AddWithValue("@user_master_guid", this.Guid);
-                    cmd.Parameters.AddWithValue("@user_name", this.UserName);
-                    cmd.Parameters.AddWithValue("@user_password", this.UserPassword);
-                    cmd.Parameters.AddWithValue("@user_salt", this.UserSalt);
+                    cmd.Parameters.Add(new SqlParameter("@user_master_guid", SqlDbType.UniqueIdentifier) { Value = this.Guid });
+                    cmd.Parameters.Add(new SqlParameter("@user_name", SqlDbType.NVarChar) { Value = this.UserName });
+                    cmd.Parameters.Add(new SqlParameter("@user_password", SqlDbType.NVarChar) { Value = this.UserPassword });
+                    cmd.Parameters.Add(new SqlParameter("@user_salt", SqlDbType.NVarChar) { Value = this.UserSalt });
                     cmd.ExecuteNonQuery();
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception("Error: User.InsertObject");
+                throw new Exception("Error: User.InsertObject", ex);
             }
         }
 
@@ -169,16 +169,16 @@ namespace HelixServiceUI.UserAuthentication
             {
                 using (SqlCommand cmd = new SqlCommand("UPDATE User_Master SET user_master_guid=@user_master_guid, user_name=@user_name, user_password=@user_password, user_salt=@user_salt WHERE user_master_guid=@user_master_guid", cn))
                 {
-                    cmd.Parameters.AddWithValue("@user_master_guid", this.Guid);
-                    cmd.Parameters.AddWithValue("@user_name", this.UserName);
-                    cmd.Parameters.AddWithValue("@user_password", this.UserPassword);
-                    cmd.Parameters.AddWithValue("@user_salt", this.UserSalt);
+                    cmd.Parameters.Add(new SqlParameter("@user_master_guid", SqlDbType.UniqueIdentifier) { Value = this.Guid });
+                    cmd.Parameters.Add(new SqlParameter("@user_name", SqlDbType.NVarChar) { Value = this.UserName });
+                    cmd.Parameters.Add(new SqlParameter("@user_password", SqlDbType.NVarChar) { Value = this.UserPassword });
+                    cmd.Parameters.Add(new SqlParameter("@user_salt", SqlDbType.NVarChar) { Value = this.UserSalt });
                     cmd.ExecuteNonQuery();
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception("Error: User.UpdateObject");
+                throw new Exception("Error: User.UpdateObject", ex);
             }
         }
 
@@ -191,13 +191,13 @@ namespace HelixServiceUI.UserAuthentication
             {
                 using (SqlCommand cmd = new SqlCommand("DELETE FROM User_Master WHERE user_master_guid=@user_master_guid", cn))
                 {
-                    cmd.Parameters.AddWithValue("@user_master_guid", this.Guid);
+                    cmd.Parameters.Add(new SqlParameter("@user_master_guid", SqlDbType.UniqueIdentifier) { Value = this.Guid });
                     cmd.ExecuteNonQuery();
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                throw new Exception("Error: User.DeleteObject");
+                throw new Exception("Error: User.DeleteObject", ex);
             }
         }
 
@@ -227,41 +227,45 @@ namespace HelixServiceUI.UserAuthentication
         {
             List<User> users = new List<User>();
 
-            SqlCommand cmd = new SqlCommand("SELECT * FROM User_Master");
+            SqlCommand select = new SqlCommand("SELECT * FROM User_Master");
             String where = String.Empty;
 
             if (filter.Guid != Guid.Empty)
             {
-                where += "user_master_guid=@user_master_guid AND ";
-                cmd.Parameters.AddWithValue("@user_master_guid", filter.Guid);
+                where += " user_master_guid=@user_master_guid";
+                select.Parameters.Add(new SqlParameter("@user_master_guid", SqlDbType.UniqueIdentifier) { Value = filter.Guid });
             }
 
             if (!String.IsNullOrEmpty(filter.UserName))
             {
-                where += "user_name=@user_name AND ";
-                cmd.Parameters.AddWithValue("@user_name", filter.UserName);
+                if (where.Length > 0) { where += " AND "; }
+                where += " user_name=@user_name";
+                select.Parameters.Add(new SqlParameter("@user_name", SqlDbType.NVarChar) { Value = filter.UserName });
             }
 
             if (!String.IsNullOrEmpty(filter.UserPassword))
             {
-                where += "user_password=@user_password AND ";
-                cmd.Parameters.AddWithValue("@user_password", filter.UserPassword);
+                if (where.Length > 0) { where += " AND "; }
+                where += " user_password=@user_password";
+                select.Parameters.Add(new SqlParameter("@user_password", SqlDbType.NVarChar) { Value = filter.UserPassword });
             }
 
             if (!String.IsNullOrEmpty(filter.UserSalt))
             {
-                where += "user_salt=@user_salt AND ";
-                cmd.Parameters.AddWithValue("@user_salt", filter.UserSalt);
+                if (where.Length > 0) { where += " AND "; }
+                where += " user_salt=@user_salt";
+                select.Parameters.Add(new SqlParameter("@user_salt", SqlDbType.NVarChar) { Value = filter.UserSalt });
             }
 
             if (!String.IsNullOrEmpty(where))
             {
-                cmd.CommandText += " WHERE " + where.Remove(where.Length - 5);
+                where = " WHERE " + where;
+                select.CommandText = select.CommandText + where;
             }
 
             using (SqlConnection cn = new SqlConnection(connectionString))
             {
-                using (DataTable dt = HDatabase.FillDataTable(cn, cmd))
+                using (DataTable dt = HDatabase.FillDataTable(cn, select))
                 {
                     foreach (DataRow dr in dt.Rows)
                     {
