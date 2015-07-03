@@ -28,10 +28,10 @@ namespace HelixServiceUI.SearchAJAX
             JavaScriptSerializer jss = new JavaScriptSerializer();
 
             // Filter by state code and name.
-            StateFilter filter = new StateFilter() { StateCode = searchTerm, StateName = searchTerm };
+            StateFilter filter = new StateFilter() { Code = searchTerm, Name = searchTerm };
 
             // Load the states into a list.
-            List<State> states = State.LoadCollection(HConfig.DBConnectionString, filter);
+            List<State> states = State.LoadCollection(filter);
 
             // Return with a JSON string containing results.
             return jss.Serialize(states);

@@ -47,11 +47,11 @@
                         // Populate table rows with results.
                         for (var i = 0; i < data.length; i++) {
                             $("#tblSearchResults tbody").append("<tr class='tblSearchRow'></td>");
-                            $("#tblSearchResults tbody tr:last").append("<td>" + data[i].StateCode + "</td>");
-                            $("#tblSearchResults tbody tr:last").append("<td>" + data[i].StateName + "</td>");
-                            $("#tblSearchResults tbody tr:last").append("<td>" + data[i].StateCapital + "</td>");
-                            $("#tblSearchResults tbody tr:last").append("<td>" + data[i].StateLargestCity + "</td>");
-                            $("#tblSearchResults tbody tr:last").append("<td>" + data[i].StateLargestMetro + "</td>");
+                            $("#tblSearchResults tbody tr:last").append("<td>" + data[i].AnsiCode + "</td>");
+                            $("#tblSearchResults tbody tr:last").append("<td>" + data[i].Name + "</td>");
+                            $("#tblSearchResults tbody tr:last").append("<td>" + data[i].Capital + "</td>");
+                            $("#tblSearchResults tbody tr:last").append("<td>" + data[i].LargestCity + "</td>");
+                            $("#tblSearchResults tbody tr:last").append("<td>" + data[i].LargestMetro + "</td>");
                         }
                     },
                     error: function (xhr, status, error) {

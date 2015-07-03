@@ -18,13 +18,30 @@ namespace HelixService.Utility
         /// </summary>
         /// <param name="xmlMemoryStream">The memory stream to write to.</param>
         /// <returns></returns>
-        public static XmlWriter GetXmlWriter(MemoryStream xmlMemoryStream)
+        public static XmlWriter GetXmlWriterFragment(MemoryStream xmlMemoryStream)
         {
             // Create xml writer settings.
             XmlWriterSettings xmlWriterSettings = new XmlWriterSettings();
             xmlWriterSettings.OmitXmlDeclaration = true;
             xmlWriterSettings.CloseOutput = false;
             xmlWriterSettings.ConformanceLevel = ConformanceLevel.Fragment;
+
+            return XmlWriter.Create(xmlMemoryStream, xmlWriterSettings);
+        }
+
+        /// <summary>
+        /// Create writer using a memory stream.
+        /// This will handle fragment xml data and omit the xml declaration.
+        /// </summary>
+        /// <param name="xmlMemoryStream">The memory stream to write to.</param>
+        /// <returns></returns>
+        public static XmlWriter GetXmlWriterDocument(MemoryStream xmlMemoryStream)
+        {
+            // Create xml writer settings.
+            XmlWriterSettings xmlWriterSettings = new XmlWriterSettings();
+            xmlWriterSettings.OmitXmlDeclaration = false;
+            xmlWriterSettings.CloseOutput = false;
+            xmlWriterSettings.ConformanceLevel = ConformanceLevel.Document;
 
             return XmlWriter.Create(xmlMemoryStream, xmlWriterSettings);
         }

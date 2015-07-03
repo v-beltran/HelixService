@@ -33,7 +33,7 @@ namespace HelixServiceUI.BinaryHandler
                 if (ViewState["BlobFileList"] == null)
                 {
                     BlobFilter filter = new BlobFilter() { IncludeBinaryData = false };
-                    List<Blob> files = Blob.LoadCollection(HConfig.DBConnectionString, filter);
+                    List<Blob> files = Blob.LoadCollection(filter);
                     ViewState["BlobFileList"] = files;
                 }
                 return (List<Blob>)ViewState["BlobFileList"];
@@ -97,7 +97,7 @@ namespace HelixServiceUI.BinaryHandler
             BlobFilter filter = new BlobFilter() { IncludeBinaryData = false, Name = searchText };
 
             // Search files by name.
-            List<Blob> files = Blob.LoadCollection(HConfig.DBConnectionString, filter);
+            List<Blob> files = Blob.LoadCollection(filter);
 
             // Rebind results.
             this.BlobFileList = files;
@@ -171,7 +171,7 @@ namespace HelixServiceUI.BinaryHandler
                 {
                     // Delete blob from database with the specified binary ID.
                     Blob blob = new Blob() { ID = blobId.Value, State = ObjectState.ToBeDeleted };
-                    blob.Commit(HConfig.DBConnectionString);
+                    blob.Commit();
 
                     // Update grid data source.
                     this.BlobFileList.RemoveAll(x => x.ID.Equals(blobId.Value));

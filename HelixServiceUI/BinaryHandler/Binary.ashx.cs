@@ -20,7 +20,7 @@ namespace HelixServiceUI.BinaryHandler
             if (id != null)
             {
                 BlobFilter filter = new BlobFilter() { ID = id.Value, IncludeBinaryData = true };
-                Blob file = Blob.Load(HConfig.DBConnectionString, filter);
+                Blob file = Blob.Load(filter);
 
                 if (file != null)
                 {

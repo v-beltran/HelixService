@@ -111,11 +111,10 @@ namespace HelixServiceUI.UserAuthentication
 
         /// <summary>
         /// Commit a transaction to the database.
-        /// </summary>
-        /// <param name="connectionString">The connection string to the database to which transactions will be made.</param>
-        public void Commit(String connectionString)
+        /// </summary>        
+        public void Commit()
         {
-            using (SqlConnection cn = new SqlConnection(connectionString))
+            using (SqlConnection cn = new SqlConnection(HConfig.DBConnectionString))
             {
                 cn.Open();
 
@@ -211,9 +210,9 @@ namespace HelixServiceUI.UserAuthentication
         /// <param name="connectionString">The connection string to the database.</param>
         /// <param name="filter">The filter used to select users.</param>
         /// <returns></returns>
-        public static User Load(String connectionString, UserFilter filter)
+        public static User Load(UserFilter filter)
         {
-            List<User> users = User.LoadCollection(connectionString, filter);
+            List<User> users = User.LoadCollection(filter);
             return users.Count > 0 ? users[0] : null;
         }
 
@@ -223,49 +222,46 @@ namespace HelixServiceUI.UserAuthentication
         /// <param name="connectionString">The connection string to the database.</param>
         /// <param name="filter">The filter used to select users.</param>
         /// <returns></returns>
-        public static List<User> LoadCollection(String connectionString, UserFilter filter)
+        public static List<User> LoadCollection(UserFilter filter)
         {
             List<User> users = new List<User>();
-
-            SqlCommand select = new SqlCommand("SELECT * FROM User_Master");
-            String where = String.Empty;
+            SqlCommand cmd = new SqlCommand();
+            StringBuilder select = new StringBuilder(1000);
 
             if (filter.Guid != Guid.Empty)
             {
-                where += " user_master_guid=@user_master_guid";
-                select.Parameters.Add(new SqlParameter("@user_master_guid", SqlDbType.UniqueIdentifier) { Value = filter.Guid });
+                select.Append("UM.user_master_guid=@user_master_guid");
+                cmd.Parameters.Add(new SqlParameter("@user_master_guid", SqlDbType.UniqueIdentifier) { Value = filter.Guid });
             }
 
             if (!String.IsNullOrEmpty(filter.UserName))
             {
-                if (where.Length > 0) { where += " AND "; }
-                where += " user_name=@user_name";
-                select.Parameters.Add(new SqlParameter("@user_name", SqlDbType.NVarChar) { Value = filter.UserName });
+                if (select.Length > 0) { select.Append(" AND "); }
+                select.Append("UM.user_name=@user_name");
+                cmd.Parameters.Add(new SqlParameter("@user_name", SqlDbType.NVarChar) { Value = filter.UserName });
             }
 
             if (!String.IsNullOrEmpty(filter.UserPassword))
             {
-                if (where.Length > 0) { where += " AND "; }
-                where += " user_password=@user_password";
-                select.Parameters.Add(new SqlParameter("@user_password", SqlDbType.NVarChar) { Value = filter.UserPassword });
+                if (select.Length > 0) { select.Append(" AND "); }
+                select.Append("UM.user_password=@user_password");
+                cmd.Parameters.Add(new SqlParameter("@user_password", SqlDbType.NVarChar) { Value = filter.UserPassword });
             }
 
             if (!String.IsNullOrEmpty(filter.UserSalt))
             {
-                if (where.Length > 0) { where += " AND "; }
-                where += " user_salt=@user_salt";
-                select.Parameters.Add(new SqlParameter("@user_salt", SqlDbType.NVarChar) { Value = filter.UserSalt });
+                if (select.Length > 0) { select.Append(" AND "); }
+                select.Append("UM.user_salt=@user_salt");
+                cmd.Parameters.Add(new SqlParameter("@user_salt", SqlDbType.NVarChar) { Value = filter.UserSalt });
             }
 
-            if (!String.IsNullOrEmpty(where))
-            {
-                where = " WHERE " + where;
-                select.CommandText = select.CommandText + where;
-            }
+            select.Insert(0, String.Format("SELECT * FROM User_Master UM {0} ", cmd.Parameters.Count > 0 ? "WHERE" : String.Empty));
+            select.Append(" ORDER BY UM.user_name");
+            cmd.CommandText = select.ToString();
 
-            using (SqlConnection cn = new SqlConnection(connectionString))
+            using (SqlConnection cn = new SqlConnection(HConfig.DBConnectionString))
             {
-                using (DataTable dt = HDatabase.FillDataTable(cn, select))
+                using (DataTable dt = HDatabase.FillDataTable(cn, cmd))
                 {
                     foreach (DataRow dr in dt.Rows)
                     {

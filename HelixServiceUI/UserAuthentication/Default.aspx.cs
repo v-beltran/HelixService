@@ -65,9 +65,9 @@ namespace HelixServiceUI.UserAuthentication
 
             try
             {
-                // Find the user by their username, since this should be unique.
+                // Find the user by their username, since this will be unique.
                 UserFilter filter = new UserFilter() { UserName = this.txtUsername.Text };
-                user = UserAuthentication.User.Load(HConfig.DBConnectionString, filter);
+                user = UserAuthentication.User.Load(filter);
 
                 // Attempt to re-create their hash with the given password and the salt saved in the database.
                 String passwordHash = HCryptography.GetHashString(this.txtPassword.Text, user.UserSalt, 256);

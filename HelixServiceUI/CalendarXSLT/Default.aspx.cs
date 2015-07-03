@@ -76,7 +76,7 @@ namespace HelixServiceUI.CalendarXSLT
         {
             // Create xml writer.
             MemoryStream ms = new MemoryStream();
-            XmlWriter xml = HXml.GetXmlWriter(ms);
+            XmlWriter xml = HXml.GetXmlWriterFragment(ms);
 
             // Get holidays for the month.
             Dictionary<DateTime, String> holidays = HDateTime.GetHolidaysInMonth(dt);

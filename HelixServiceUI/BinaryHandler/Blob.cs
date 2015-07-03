@@ -5,6 +5,7 @@ using System.Data;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 
 namespace HelixServiceUI.BinaryHandler
@@ -142,9 +143,9 @@ namespace HelixServiceUI.BinaryHandler
         /// Commit a transaction to the database.
         /// </summary>
         /// <param name="connectionString">The connection string to the database to which transactions will be made.</param>
-        public void Commit(String connectionString)
+        public void Commit()
         {
-            using (SqlConnection cn = new SqlConnection(connectionString))
+            using (SqlConnection cn = new SqlConnection(HConfig.DBConnectionString))
             {
                 cn.Open();
 
@@ -241,9 +242,9 @@ namespace HelixServiceUI.BinaryHandler
         /// <param name="connectionString">The connection string to the database.</param>
         /// <param name="filter">The filter used to select blobs.</param>
         /// <returns></returns>
-        public static Blob Load(String connectionString, BlobFilter filter)
+        public static Blob Load(BlobFilter filter)
         {
-            List<Blob> blobs = Blob.LoadCollection(connectionString, filter);
+            List<Blob> blobs = Blob.LoadCollection(filter);
             return blobs.Count > 0 ? blobs[0] : null;
         }
 
@@ -253,56 +254,53 @@ namespace HelixServiceUI.BinaryHandler
         /// <param name="connectionString">The connection string to the database.</param>
         /// <param name="filter">The filter used to select blobs.</param>
         /// <returns></returns>
-        public static List<Blob> LoadCollection(String connectionString, BlobFilter filter)
+        public static List<Blob> LoadCollection(BlobFilter filter)
         {
             List<Blob> blobs = new List<Blob>();
-
-            SqlCommand select = new SqlCommand("SELECT * FROM Binary_Master");
-            String where = String.Empty;
+            SqlCommand cmd = new SqlCommand();
+            StringBuilder select = new StringBuilder(1000);
 
             if (filter.ID > 0)
             {
-                where += "binary_id=@binary_id";
-                select.Parameters.Add(new SqlParameter("@binary_id", SqlDbType.Int) { Value = filter.ID });
+                select.Append("BM.binary_id=@binary_id");
+                cmd.Parameters.Add(new SqlParameter("@binary_id", SqlDbType.Int) { Value = filter.ID });
             }
 
             if (!String.IsNullOrEmpty(filter.Name))
             {
-                if (where.Length > 0) { where += " AND "; }
-                where += "binary_name LIKE '%' + @binary_name + '%'";
-                select.Parameters.Add(new SqlParameter("@binary_name", SqlDbType.NVarChar) { Value = filter.Name });
+                if (select.Length > 0) { select.Append(" AND "); }
+                select.Append("BM.binary_name LIKE '%' + @binary_name + '%'");
+                cmd.Parameters.Add(new SqlParameter("@binary_name", SqlDbType.NVarChar) { Value = filter.Name });
             }
 
             if (!String.IsNullOrEmpty(filter.MimeType))
             {
-                if (where.Length > 0) { where += " AND "; }
-                where += "binary_mime_type LIKE '%' + @binary_mime_type + '%'";
-                select.Parameters.Add(new SqlParameter("@binary_mime_type", SqlDbType.NVarChar) { Value = filter.MimeType });
+                if (select.Length > 0) { select.Append(" AND "); }
+                select.Append("BM.binary_mime_type LIKE '%' + @binary_mime_type + '%'");
+                cmd.Parameters.Add(new SqlParameter("@binary_mime_type", SqlDbType.NVarChar) { Value = filter.MimeType });
             }
 
             if (filter.SizeGreaterThan > 0)
             {
-                if (where.Length > 0) { where += " AND "; }
-                where += "binary_size >= @binary_size";
-                select.Parameters.Add(new SqlParameter("@binary_size", SqlDbType.Int) { Value = filter.SizeGreaterThan });
+                if (select.Length > 0) { select.Append(" AND "); }
+                select.Append("BM.binary_size >= @binary_size");
+                cmd.Parameters.Add(new SqlParameter("@binary_size", SqlDbType.Int) { Value = filter.SizeGreaterThan });
             }
 
             if (filter.SizeLessThan > 0)
             {
-                if (where.Length > 0) { where += " AND "; }
-                where += "binary_size <= @binary_size";
-                select.Parameters.Add(new SqlParameter("@binary_size", SqlDbType.Int) { Value = filter.SizeLessThan });
+                if (select.Length > 0) { select.Append(" AND "); }
+                select.Append("BM.binary_size <= @binary_size");
+                cmd.Parameters.Add(new SqlParameter("@binary_size", SqlDbType.Int) { Value = filter.SizeLessThan });
             }
 
-            if (!String.IsNullOrEmpty(where))
-            {
-                where = " WHERE " + where;
-                select.CommandText = select.CommandText + where;
-            }
+            select.Insert(0, String.Format("SELECT * FROM Binary_Master BM {0} ", cmd.Parameters.Count > 0 ? "WHERE" : String.Empty));
+            select.Append(" ORDER BY BM.binary_name");
+            cmd.CommandText = select.ToString();
 
-            using (SqlConnection cn = new SqlConnection(connectionString))
+            using (SqlConnection cn = new SqlConnection(HConfig.DBConnectionString))
             {
-                using (DataTable dt = HDatabase.FillDataTable(cn, select))
+                using (DataTable dt = HDatabase.FillDataTable(cn, cmd))
                 {
                     foreach (DataRow dr in dt.Rows)
                     {

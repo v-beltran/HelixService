@@ -21,7 +21,7 @@ namespace HelixServiceUI.UserAuthentication
             {
                 if ((List<User>)Session["User_List"] == null)
                 {
-                    Session["User_List"] = UserAuthentication.User.LoadCollection(HConfig.DBConnectionString, new UserFilter());
+                    Session["User_List"] = UserAuthentication.User.LoadCollection(new UserFilter());
                 }
                 return (List<User>)Session["User_List"];
             }
@@ -118,7 +118,7 @@ namespace HelixServiceUI.UserAuthentication
                 user.State = ObjectState.ToBeDeleted;
 
                 // User no longer exists. . .
-                user.Commit(HConfig.DBConnectionString);
+                user.Commit();
 
                 // Rebind data.
                 this.SetUserTable();
@@ -157,7 +157,7 @@ namespace HelixServiceUI.UserAuthentication
                 }
 
                 // Update user credentials.
-                user.Commit(HConfig.DBConnectionString);
+                user.Commit();
 
                 // Rebind data.
                 this.SetUserTable();
@@ -208,7 +208,7 @@ namespace HelixServiceUI.UserAuthentication
                 UserFilter filter = new UserFilter() { UserName = name };
 
                 // Attempt to load a list of users based on the above filter.
-                List<User> users = UserAuthentication.User.LoadCollection(HConfig.DBConnectionString, filter);
+                List<User> users = UserAuthentication.User.LoadCollection(filter);
 
                 // A valid username is one that does not exist in the database yet.
                 if (users.Count == 0)

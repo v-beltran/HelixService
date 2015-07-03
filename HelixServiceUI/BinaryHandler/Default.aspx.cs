@@ -47,7 +47,7 @@ namespace HelixServiceUI.BinaryHandler
                     try
                     {
                         // Insert into database and inform user.
-                        b.Commit(HConfig.DBConnectionString);
+                        b.Commit();
                         this.lSuccess.Text += String.Format("<p>SUCCESS: {0} uploaded successfully.</p>", b.Name);
                         count++;
                     }

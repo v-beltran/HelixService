@@ -85,6 +85,8 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="XMLSerializer\Deserialize.aspx" />
+    <Content Include="XMLSerializer\Serialize.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BinaryHandler\Binary.ashx.cs">
@@ -194,6 +196,21 @@
     </Compile>
     <Compile Include="UserAuthentication\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XMLSerializer\Deserialize.aspx.cs">
+      <DependentUpon>Deserialize.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="XMLSerializer\Deserialize.aspx.designer.cs">
+      <DependentUpon>Deserialize.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="XMLSerializer\Employee.cs" />
+    <Compile Include="XMLSerializer\Serialize.aspx.cs">
+      <DependentUpon>Serialize.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="XMLSerializer\Serialize.aspx.designer.cs">
+      <DependentUpon>Serialize.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="ImageTransform\Image.ashx" />
@@ -213,7 +230,6 @@
       <Name>HelixService</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
   </ItemGroup>

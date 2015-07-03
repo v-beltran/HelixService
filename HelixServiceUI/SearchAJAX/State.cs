@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 using System.Web;
 
 namespace HelixServiceUI.SearchAJAX
@@ -18,31 +19,31 @@ namespace HelixServiceUI.SearchAJAX
         private String _state_largest_city;
         private String _state_largest_metro;
 
-        public String StateCode
+        public String AnsiCode
         {
             get { return this._state_ansi_code; }
             set { this._state_ansi_code = value; }
         }
 
-        public String StateName
+        public String Name
         {
             get { return this._state_name; }
             set { this._state_name = value; }
         }
 
-        public String StateCapital
+        public String Capital
         {
             get { return this._state_capital; }
             set { this._state_capital = value; }
         }
 
-        public String StateLargestCity
+        public String LargestCity
         {
             get { return this._state_largest_city; }
             set { this._state_largest_city = value; }
         }
 
-        public String StateLargestMetro
+        public String LargestMetro
         {
             get { return this._state_largest_metro; }
             set { this._state_largest_metro = value; }
@@ -57,11 +58,11 @@ namespace HelixServiceUI.SearchAJAX
         /// </summary>
         public State()
         {
-            this.StateCode = String.Empty;
-            this.StateName = String.Empty;
-            this.StateCapital = String.Empty;
-            this.StateLargestCity = String.Empty;
-            this.StateLargestMetro = String.Empty;
+            this.AnsiCode = String.Empty;
+            this.Name = String.Empty;
+            this.Capital = String.Empty;
+            this.LargestCity = String.Empty;
+            this.LargestMetro = String.Empty;
         }
 
         /// <summary>
@@ -70,11 +71,11 @@ namespace HelixServiceUI.SearchAJAX
         /// <param name="dr">The data row to populate the State object.</param>
         public State(DataRow dr)
         {
-            this.StateCode = HString.SafeTrim(dr["state_ansi_code"]);
-            this.StateName = HString.SafeTrim(dr["state_name"]);
-            this.StateCapital = HString.SafeTrim(dr["state_capital"]);
-            this.StateLargestCity = HString.SafeTrim(dr["state_largest_city"]);
-            this.StateLargestMetro = HString.SafeTrim(dr["state_largest_metro"]);
+            this.AnsiCode = HString.SafeTrim(dr["state_ansi_code"]);
+            this.Name = HString.SafeTrim(dr["state_name"]);
+            this.Capital = HString.SafeTrim(dr["state_capital"]);
+            this.LargestCity = HString.SafeTrim(dr["state_largest_city"]);
+            this.LargestMetro = HString.SafeTrim(dr["state_largest_metro"]);
         }
 
         #endregion
@@ -87,9 +88,9 @@ namespace HelixServiceUI.SearchAJAX
         /// <param name="connectionString">The connection string to the database.</param>
         /// <param name="filter">The filter used to select states.</param>
         /// <returns></returns>
-        public static State Load(String connectionString, StateFilter filter)
+        public static State Load(StateFilter filter)
         {
-            List<State> states = State.LoadCollection(connectionString, filter);
+            List<State> states = State.LoadCollection(filter);
             return states.Count > 0 ? states[0] : null;
         }
 
@@ -99,56 +100,53 @@ namespace HelixServiceUI.SearchAJAX
         /// <param name="connectionString">The connection string to the database.</param>
         /// <param name="filter">The filter used to select states.</param>
         /// <returns></returns>
-        public static List<State> LoadCollection(String connectionString, StateFilter filter)
+        public static List<State> LoadCollection(StateFilter filter)
         {
             List<State> states = new List<State>();
+            SqlCommand cmd = new SqlCommand();
+            StringBuilder select = new StringBuilder(1000);
 
-            SqlCommand select = new SqlCommand("SELECT * FROM State_Master");
-            String where = String.Empty;
-
-            if (!String.IsNullOrEmpty(filter.StateCode))
+            if (!String.IsNullOrEmpty(filter.Code))
             {
-                where += "state_ansi_code LIKE '%' + @state_ansi_code + '%'";
-                select.Parameters.Add(new SqlParameter("@state_ansi_code", SqlDbType.NVarChar) { Value = filter.StateCode });
+                select.Append("SM.state_ansi_code LIKE '%' + @state_ansi_code + '%'");
+                cmd.Parameters.Add(new SqlParameter("@state_ansi_code", SqlDbType.NVarChar) { Value = filter.Code });
             }
 
-            if (!String.IsNullOrEmpty(filter.StateName))
+            if (!String.IsNullOrEmpty(filter.Name))
             {
-                if (where.Length > 0) { where += " OR "; }
-                where += "state_name LIKE '%' + @state_name + '%'";
-                select.Parameters.Add(new SqlParameter("@state_name", SqlDbType.NVarChar) { Value = filter.StateName });
+                if (select.Length > 0) { select.Append(" OR "); }
+                select.Append("SM.state_name LIKE '%' + @state_name + '%'");
+                cmd.Parameters.Add(new SqlParameter("@state_name", SqlDbType.NVarChar) { Value = filter.Name });
             }
 
-            if (!String.IsNullOrEmpty(filter.StateCapital))
+            if (!String.IsNullOrEmpty(filter.Capital))
             {
-                if (where.Length > 0) { where += " OR "; }
-                where += "state_capital LIKE '%' + @state_capital + '%'";
-                select.Parameters.Add(new SqlParameter("@state_capital", SqlDbType.NVarChar) { Value = filter.StateCapital });
+                if (select.Length > 0) { select.Append(" OR "); }
+                select.Append("SM.state_capital LIKE '%' + @state_capital + '%'");
+                cmd.Parameters.Add(new SqlParameter("@state_capital", SqlDbType.NVarChar) { Value = filter.Capital });
             }
 
-            if (!String.IsNullOrEmpty(filter.StateLargestCity))
+            if (!String.IsNullOrEmpty(filter.LargestCity))
             {
-                if (where.Length > 0) { where += " OR "; }
-                where += "state_largest_city LIKE '%' + @state_largest_city + '%'";
-                select.Parameters.Add(new SqlParameter("@state_largest_city", SqlDbType.NVarChar) { Value = filter.StateLargestCity });
+                if (select.Length > 0) { select.Append(" OR "); }
+                select.Append("SM.state_largest_city LIKE '%' + @state_largest_city + '%'");
+                cmd.Parameters.Add(new SqlParameter("@state_largest_city", SqlDbType.NVarChar) { Value = filter.LargestCity });
             }
 
-            if (!String.IsNullOrEmpty(filter.StateLargestMetro))
+            if (!String.IsNullOrEmpty(filter.LargestMetro))
             {
-                if (where.Length > 0) { where += " OR "; }
-                where += "state_largest_metro LIKE '%' + @state_largest_metro + '%'";
-                select.Parameters.Add(new SqlParameter("@state_largest_metro", SqlDbType.NVarChar) { Value = filter.StateLargestMetro });
+                if (select.Length > 0) { select.Append(" OR "); }
+                select.Append("SM.state_largest_metro LIKE '%' + @state_largest_metro + '%'");
+                cmd.Parameters.Add(new SqlParameter("@state_largest_metro", SqlDbType.NVarChar) { Value = filter.LargestMetro });
             }
 
-            if (!String.IsNullOrEmpty(where))
-            {
-                where = " WHERE " + where;
-                select.CommandText = select.CommandText + where;
-            }
+            select.Insert(0, String.Format("SELECT * FROM State_Master SM {0} ", cmd.Parameters.Count > 0 ? "WHERE" : String.Empty));
+            select.Append(" ORDER BY SM.state_name");
+            cmd.CommandText = select.ToString();
 
-            using (SqlConnection cn = new SqlConnection(connectionString))
+            using (SqlConnection cn = new SqlConnection(HConfig.DBConnectionString))
             {
-                using (DataTable dt = HDatabase.FillDataTable(cn, select))
+                using (DataTable dt = HDatabase.FillDataTable(cn, cmd))
                 {
                     foreach (DataRow dr in dt.Rows)
                     {
@@ -170,11 +168,11 @@ namespace HelixServiceUI.SearchAJAX
     /// </summary>
     public class StateFilter
     {
-        public String StateCode { get; set; }
-        public String StateName { get; set; }
-        public String StateCapital { get; set; }
-        public String StateLargestCity { get; set; }
-        public String StateLargestMetro { get; set; }
+        public String Code { get; set; }
+        public String Name { get; set; }
+        public String Capital { get; set; }
+        public String LargestCity { get; set; }
+        public String LargestMetro { get; set; }
 
         /// <summary>
         /// Empty constructor.
