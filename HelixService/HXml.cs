@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Web;
 using System.Xml;
+using System.Xml.Linq;
+using System.Xml.Serialization;
 using System.Xml.XPath;
 using System.Xml.Xsl;
 
@@ -142,6 +145,67 @@ namespace HelixService.Utility
         {
             XPathNavigator selectNode = xpn.SelectSingleNode(xpath);
             return (selectNode != null) ? selectNode.Value : String.Empty;
+        }
+
+        /// <summary>
+        /// Process object as XML.
+        /// </summary>
+        /// <typeparam name="T">The object type to process.</typeparam>
+        /// <param name="value">The object to process.</param>
+        /// <returns></returns>
+        public static String SerializeToXmlString<T>(T value)
+        {
+            String xmlResult = String.Empty;
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
+            using (StringWriter writer = new StringWriter(CultureInfo.InvariantCulture))
+            {
+                serializer.Serialize(writer, value);
+                xmlResult = writer.ToString();
+            }
+
+            return xmlResult;
+        }
+
+        /// <summary>
+        /// Process object as XML.
+        /// </summary>
+        /// <typeparam name="T">The object type to process.</typeparam>
+        /// <param name="value">The object to process.</param>
+        /// <returns></returns>
+        public static XElement SerializeToXml<T>(T value)
+        {
+            XmlSerializer xs = new XmlSerializer(typeof(T));
+            XDocument doc = new XDocument();
+
+            using (XmlWriter xw = doc.CreateWriter())
+            {
+                xs.Serialize(xw, value);
+                xw.Close();
+            }
+
+            XElement element = doc.Root;
+            return element;
+        }
+
+        /// <summary>
+        /// Process XML as object.
+        /// </summary>
+        /// <typeparam name="T">The object type to deserialize to.</typeparam>
+        /// <param name="xml">The xml to deserialize.</param>
+        /// <returns></returns>
+        public static T DeserializeFromXml<T>(String xml)
+        {
+            T deserialized = default(T);
+            XElement element = XElement.Parse(xml);
+            XmlSerializer xs = new XmlSerializer(typeof(T));
+
+            using (XmlReader xr = element.CreateReader())
+            {
+                deserialized = (T)xs.Deserialize(xr);
+                xr.Close();
+            }
+
+            return deserialized;
         }
     }
 }

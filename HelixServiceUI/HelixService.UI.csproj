@@ -85,8 +85,8 @@
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="XMLSerializer\Deserialize.aspx" />
-    <Content Include="XMLSerializer\Serialize.aspx" />
+    <Content Include="XMLSerializer\Default.aspx" />
+    <Content Include="XMLSerializer\ManageEmployee.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BinaryHandler\Binary.ashx.cs">
@@ -196,20 +196,21 @@
     </Compile>
     <Compile Include="UserAuthentication\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XMLSerializer\Deserialize.aspx.cs">
-      <DependentUpon>Deserialize.aspx</DependentUpon>
+    <Compile Include="XMLSerializer\ChangeLog.cs" />
+    <Compile Include="XMLSerializer\Default.aspx.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="XMLSerializer\Deserialize.aspx.designer.cs">
-      <DependentUpon>Deserialize.aspx</DependentUpon>
+    <Compile Include="XMLSerializer\Default.aspx.designer.cs">
+      <DependentUpon>Default.aspx</DependentUpon>
     </Compile>
     <Compile Include="XMLSerializer\Employee.cs" />
-    <Compile Include="XMLSerializer\Serialize.aspx.cs">
-      <DependentUpon>Serialize.aspx</DependentUpon>
+    <Compile Include="XMLSerializer\ManageEmployee.aspx.cs">
+      <DependentUpon>ManageEmployee.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="XMLSerializer\Serialize.aspx.designer.cs">
-      <DependentUpon>Serialize.aspx</DependentUpon>
+    <Compile Include="XMLSerializer\ManageEmployee.aspx.designer.cs">
+      <DependentUpon>ManageEmployee.aspx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>

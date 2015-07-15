@@ -1,0 +1,15 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @RenderSection("Styles", required: true)
+    @RenderSection("Scripts", required: false)
+</head>
+<body>
+    <div class="content_wrapper">
+        @RenderBody()
+    </div>
+</body>
+</html>

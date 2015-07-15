@@ -1,0 +1,44 @@
+﻿@model IEnumerable<HelixService.MVC.Models.Employee>
+
+@{
+    ViewBag.Title = "Employee List";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+<h2>Employee List</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="list-view">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastName)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.FirstName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.LastName)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Guid }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Guid }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Guid })
+        </td>
+    </tr>
+}
+
+</table>
+
+@section Styles {
+    @Styles.Render("~/Content/css")
+}

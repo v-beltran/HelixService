@@ -1,0 +1,12 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+@Html.ActionLink("Employee Demo", "Index", "Employee")
+
+@section Styles {
+    @Styles.Render("~/Content/css")
+}

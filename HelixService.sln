@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelixService", "HelixServic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelixService.UI", "HelixServiceUI\HelixService.UI.csproj", "{940D66ED-E863-4D0D-86F8-E1B618E1BE7E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HelixService.MVC", "HelixService.MVC\HelixService.MVC.csproj", "{C82E69D9-EC31-4C7D-997C-66F765EF5D93}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{940D66ED-E863-4D0D-86F8-E1B618E1BE7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{940D66ED-E863-4D0D-86F8-E1B618E1BE7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{940D66ED-E863-4D0D-86F8-E1B618E1BE7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C82E69D9-EC31-4C7D-997C-66F765EF5D93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C82E69D9-EC31-4C7D-997C-66F765EF5D93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C82E69D9-EC31-4C7D-997C-66F765EF5D93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C82E69D9-EC31-4C7D-997C-66F765EF5D93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

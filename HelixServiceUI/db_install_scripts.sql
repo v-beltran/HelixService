@@ -20,6 +20,36 @@ binary_size int not null);
 GO
 
 /****************************************
+USE: XMLSerializer / MVC DEMO
+*****************************************/
+CREATE TABLE Employee_Master(
+	employee_master_guid uniqueidentifier NOT NULL,
+	company_master_guid uniqueidentifier NULL, -- USED FOR MVC DEMO ONLY
+	employee_first_name nvarchar(256) NOT NULL,
+	employee_last_name nvarchar(256) NOT NULL,
+	employee_email nvarchar(512) NOT NULL,
+	employee_phone nvarchar(20) NOT NULL,
+	employee_state nvarchar(100) NOT NULL,
+	employee_city nvarchar(100) NOT NULL,
+	employee_street nvarchar(100) NOT NULL,
+	employee_zip nvarchar(10) NOT NULL,
+	employee_xml xml NULL -- USED FOR XMLSERIALIZER DEMO ONLY
+);
+GO
+
+CREATE TABLE Change_Log_Master(
+	change_log_master_id int NOT NULL identity(1,1),
+	owner_id nvarchar(1000) NOT NULL,
+	owner_name nvarchar(1000) NOT NULL,
+	log_type nvarchar(50) NOT NULL,
+	timestamp datetime NOT NULL,
+	property_name nvarchar(200) NOT NULL,
+	prev_value nvarchar(MAX) NOT NULL,
+	new_value nvarchar(MAX) NOT NULL,
+);
+GO
+
+/****************************************
 Use: SearchAJAX Demo
 *****************************************/
 CREATE TABLE State_Master(
